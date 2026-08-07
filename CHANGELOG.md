@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Refreshed the README around a popular GitHub README structure with clearer positioning, navigation, architecture, quick start, subagent budgets, and project links.
+- Added repository contribution and security guidance.
+- Added a GitHub Actions validation workflow for pushes and pull requests.
+- Removed duplicate marketplace metadata and the obsolete one-time deployment guide.
+- Kept the plugin version at `0.4.0` because the skill contracts and runtime behavior did not change.
+
 ## 0.4.0 — 2026-08-07
 
 - Simplified every skill while preserving role boundaries, evidence rules, and failure-depth routing.

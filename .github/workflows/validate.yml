@@ -1,0 +1,30 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate skill pack
+        run: python tests/validate_pack.py
+
+      - name: Calculate sample metrics
+        run: python skills/loop-evaluator/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
+
+      - name: Check whitespace
+        run: git diff --check

@@ -1,10 +1,11 @@
 {
   "name": "thoughtloop",
   "version": "0.4.0",
-  "description": "Adaptive deliberate problem solving for coding agents: search when useful, decide with tradeoffs, execute economically, prove with evidence, and optionally delegate bounded work to subagents.",
+  "description": "A composable Codex skill pack that helps coding agents explore alternatives, choose deliberately, execute economically, and prove results with evidence.",
   "license": "MIT",
   "keywords": [
     "agent-skills",
+    "agent-workflows",
     "architecture",
     "brainstorming",
     "codex",
@@ -14,6 +15,7 @@
     "evaluation",
     "exploration",
     "problem-solving",
+    "prompt-engineering",
     "quality",
     "reasoning",
     "self-correction",

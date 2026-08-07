@@ -10,6 +10,7 @@ ThoughtLoop is a Codex skill pack for deliberate problem solving. Preserve the p
 - Evidence must outrank model confidence; unavailable evidence is `UNKNOWN`, never an implicit `PASS`.
 - Keep exploration and verification bounded.
 - Do not require, request, or log hidden chain-of-thought. Store observable evidence, alternatives, decisions, tests, critiques, and concise rationales instead.
+- Keep `.agents/plugins/marketplace.json` as the canonical local marketplace metadata; do not add a duplicate root copy.
 
 ## Before committing changes
 

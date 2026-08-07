@@ -139,6 +139,23 @@ def main() -> int:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "Think wider. Build better. Prove it." in readme, "tagline missing"
     assert "Subagent mode" in readme and "--subagents" in readme, "subagent mode documentation missing"
+    for section in (
+        "Table of contents",
+        "Why ThoughtLoop",
+        "How it works",
+        "Quick start",
+        "Install",
+        "Validate",
+        "Compatibility",
+        "Roadmap",
+        "Contributing",
+        "Security",
+    ):
+        assert section in readme, f"README section missing: {section}"
+    for document in ("CONTRIBUTING.md", "SECURITY.md"):
+        assert (ROOT / document).exists(), f"missing repository document: {document}"
+    assert not (ROOT / "marketplace.example.json").exists(), "duplicate marketplace metadata should not be present"
+    assert not (ROOT / "DEPLOY_TO_GITHUB.md").exists(), "obsolete deployment guide should not be present"
     alias = (ROOT / "skills/self-correction/SKILL.md").read_text(encoding="utf-8")
     assert "$thoughtloop" in alias and "Deprecated" in alias, "compatibility alias must redirect to ThoughtLoop"
 
