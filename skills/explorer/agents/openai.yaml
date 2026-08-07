@@ -1,0 +1,5 @@
+interface:
+  display_name: "Explorer"
+  short_description: "Search materially different solution families"
+policy:
+  allow_implicit_invocation: false

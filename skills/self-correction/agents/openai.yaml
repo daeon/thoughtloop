@@ -1,0 +1,6 @@
+interface:
+  display_name: "Self-Correction (Deprecated)"
+  short_description: "Compatibility alias for ThoughtLoop"
+  default_prompt: "Redirect this request to ThoughtLoop and follow the $thoughtloop workflow. This alias is deprecated."
+policy:
+  allow_implicit_invocation: false

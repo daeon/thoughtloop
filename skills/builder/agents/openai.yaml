@@ -1,0 +1,5 @@
+interface:
+  display_name: "Builder"
+  short_description: "Generate or minimally revise an artifact"
+policy:
+  allow_implicit_invocation: false

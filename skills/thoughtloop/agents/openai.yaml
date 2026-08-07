@@ -1,0 +1,6 @@
+interface:
+  display_name: "ThoughtLoop"
+  short_description: "Discover, decide, execute, and independently prove"
+  default_prompt: "Use ThoughtLoop to search the solution space when warranted, select deliberately, execute economically, verify independently, and backtrack at the right failure depth."
+policy:
+  allow_implicit_invocation: true

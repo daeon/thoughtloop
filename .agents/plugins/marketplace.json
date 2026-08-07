@@ -1,0 +1,20 @@
+{
+  "name": "thoughtloop-local",
+  "interface": {
+    "displayName": "ThoughtLoop Local"
+  },
+  "plugins": [
+    {
+      "name": "thoughtloop",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

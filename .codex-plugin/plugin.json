@@ -1,0 +1,39 @@
+{
+  "name": "thoughtloop",
+  "version": "0.3.0",
+  "description": "Deliberate problem solving for coding agents: discover solution families, challenge assumptions, decide with evidence, execute deliberately, and independently prove the result.",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "architecture",
+    "brainstorming",
+    "codex",
+    "coding-agents",
+    "decision-making",
+    "deliberation",
+    "evaluation",
+    "exploration",
+    "problem-solving",
+    "quality",
+    "reasoning",
+    "self-correction",
+    "skills",
+    "verification"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "ThoughtLoop",
+    "shortDescription": "Think wider. Build better. Prove it.",
+    "longDescription": "A composable Codex skill pack for deliberate problem solving. ThoughtLoop searches the solution space when warranted, challenges assumptions before commitment, selects using explicit tradeoffs, executes economically, verifies with independent evidence, and backtracks at the correct failure depth.",
+    "developerName": "ThoughtLoop contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use ThoughtLoop to search the solution space when warranted, select deliberately, execute economically, and independently prove the result.",
+      "Challenge the framing before committing, then backtrack at the correct failure depth if evidence disproves the implementation, strategy, or assumptions."
+    ]
+  }
+}
