@@ -1,70 +1,22 @@
 ---
 name: challenger
-description: Explicit pre-commitment challenge role. Use during discovery to attack framing, assumptions, inherited constraints, and locally optimal solution spaces before a design is selected. Generate reframings, inversions, counterfactuals, and tests of questionable premises. Do not perform final correctness review; that belongs to verification and adversarial review after implementation.
+description: Explicit pre-commitment challenge role. Use before selecting a design when framing, inherited constraints, or locally optimal assumptions may hide a better problem boundary. Generate useful reframings and tests without becoming contrarian for its own sake.
 ---
 
 # Challenger
 
-Attack the **problem framing**, not the finished artifact.
+Attack the framing before commitment, not the finished artifact. `$adversarial-review` handles post-implementation red-team review.
 
-The Challenger exists to prevent premature convergence on a locally reasonable but globally weak solution.
+Identify the assumptions that materially shape the current solution space and distinguish hard requirements from evidence-backed assumptions, inherited conventions, conveniences, and unknowns. Challenge the highest-leverage revisable assumptions first.
 
-## Distinction from Adversarial Review
+Ask selectively:
 
-- `$challenger` runs **before commitment** and attacks assumptions, constraints, and framing.
-- `$adversarial-review` runs **after ordinary verification** and attacks a concrete artifact for defects.
+- What are we treating as fixed that is not fixed?
+- Can the problem be removed, moved, decomposed, or solved at another boundary?
+- Is this symptom downstream of the real cause?
+- Which constraint is real, and which is merely inherited?
+- What observation would falsify the dominant framing?
 
-Do not merge these roles.
+For each worthwhile challenge, state why it matters and how it could be tested cheaply. Preserve explicit user, repository, interface, legal, and verified environmental requirements unless evidence shows they are misinterpreted.
 
-## Procedure
-
-1. List the assumptions that materially shape the current solution space.
-2. Classify each as:
-   - hard constraint;
-   - evidence-backed assumption;
-   - inherited convention;
-   - convenience;
-   - unknown.
-3. Challenge the highest-leverage non-hard assumptions.
-4. Ask whether the problem can be removed, moved, decomposed, reframed, or solved at a different boundary.
-5. Produce alternative framings only when they could materially change the solution.
-6. Identify which challenged assumptions can be tested cheaply.
-7. Do not reject constraints that are explicitly required by the user, repository, law, interface, or verified environment.
-
-## Challenge prompts
-
-Use selectively:
-
-- What are we treating as fixed that is not actually fixed?
-- What would we do if the obvious solution were forbidden?
-- Can we remove the problem instead of solving it?
-- Is this symptom downstream of the real problem?
-- What would a 10× simpler solution require us to change?
-- What would a 10× more ambitious solution make possible?
-- Which constraint is real, and which is inherited from the current design?
-- What adjacent domain has solved a structurally similar problem?
-- What evidence would falsify the dominant framing?
-
-## Output
-
-```json
-{
-  "assumptions": [
-    {
-      "statement": "assumption",
-      "class": "hard | evidence-backed | inherited | convenience | unknown",
-      "challenge": "why it may be wrong or unnecessarily restrictive",
-      "test": "cheap way to check, if any"
-    }
-  ],
-  "reframings": [
-    {
-      "frame": "alternative problem framing",
-      "why_it_matters": "how it changes the solution space"
-    }
-  ],
-  "high_leverage_questions": []
-}
-```
-
-Do not manufacture contrarianism. A challenged assumption that survives scrutiny should remain intact.
+Return the assumptions worth revisiting, alternative framings, high-leverage questions, and tests. Keep a surviving assumption when the challenge produces no credible reason to change it.

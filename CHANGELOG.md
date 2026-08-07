@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 — 2026-08-07
+
+- Simplified every skill while preserving role boundaries, evidence rules, and failure-depth routing.
+- Added explicit, budget-aware ThoughtLoop subagent mode with narrow fresh-context delegation.
+- Simplified orchestration references and made the state contract optional guidance rather than a required schema.
+- Updated the README, plugin metadata, and validation expectations.
+
 ## 0.3.0 — 2026-08-07
 
 - Rebranded the project as **ThoughtLoop**.

@@ -20,7 +20,7 @@ This archive is intended to become the repository root for a standalone public r
 5. Commit the complete repository as `Initial ThoughtLoop release`.
 6. Push to `main`.
 7. Confirm the rendered README starts with **ThoughtLoop** and **Think wider. Build better. Prove it.**
-8. Confirm `.codex-plugin/plugin.json` reports plugin name `thoughtloop` and version `0.3.0`.
+8. Confirm `.codex-plugin/plugin.json` reports plugin name `thoughtloop` and version `0.4.0`.
 
 ## Codex deployment prompt
 

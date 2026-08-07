@@ -49,7 +49,7 @@ def main() -> int:
     assert NAME_RE.fullmatch(manifest["name"]), "plugin name must be kebab-case"
     assert manifest.get("skills") == "./skills/", "manifest skills path should be ./skills/"
     assert re.fullmatch(r"\d+\.\d+\.\d+", manifest["version"]), "version must be semver-like"
-    assert manifest["version"] == "0.3.0", "expected v0.3.0 ThoughtLoop release"
+    assert manifest["version"] == "0.4.0", "expected v0.4.0 ThoughtLoop release"
 
     skill_dirs = sorted(p for p in SKILLS.iterdir() if p.is_dir())
     assert len(skill_dirs) == len(EXPECTED_SKILLS), (
@@ -98,6 +98,14 @@ def main() -> int:
         assert p.exists(), f"missing {p}"
 
     orchestrator = (ROOT / "skills/thoughtloop/SKILL.md").read_text(encoding="utf-8")
+    for reference in [
+        "references/routing.md",
+        "references/solution-space-search.md",
+        "references/evidence-ladder.md",
+        "references/failure-depth.md",
+        "references/state-contract.md",
+    ]:
+        assert reference in orchestrator, f"orchestrator does not link reference: {reference}"
     for phrase in [
         "DISCOVER -> DECIDE -> EXECUTE -> PROVE",
         "IMPLEMENTATION",
@@ -107,19 +115,30 @@ def main() -> int:
         "$explorer",
         "$challenger",
         "$synthesizer",
+        "--subagents",
+        "budget=balanced",
+        "delegation.mode=subagents",
+        "fork_context=false",
+        "`light`",
+        "`deep`",
+        "fresh context",
+        "lower-cost",
     ]:
         assert phrase in orchestrator, f"orchestrator missing required architecture token: {phrase}"
 
     explorer = (ROOT / "skills/explorer/SKILL.md").read_text(encoding="utf-8")
-    assert "Do **not** rank or select the winner" in explorer, "Explorer must not prematurely select"
+    assert "Do not rank or select the winner" in explorer, "Explorer must not prematurely select"
     synthesizer = (ROOT / "skills/synthesizer/SKILL.md").read_text(encoding="utf-8")
-    assert "BUILD | EXPERIMENT | EXPLORE" in synthesizer, "Synthesizer routing contract missing"
+    for action in ("`BUILD`", "`EXPERIMENT`", "`EXPLORE`"):
+        assert action in synthesizer, f"Synthesizer routing contract missing: {action}"
     challenger = (ROOT / "skills/challenger/SKILL.md").read_text(encoding="utf-8")
     assert "$adversarial-review" in challenger, "Challenger/Adversarial distinction missing"
 
     assert manifest["name"] == "thoughtloop", "plugin must be branded thoughtloop"
     assert manifest.get("interface", {}).get("displayName") == "ThoughtLoop", "displayName must be ThoughtLoop"
-    assert "Think wider. Build better. Prove it." in (ROOT / "README.md").read_text(encoding="utf-8"), "tagline missing"
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "Think wider. Build better. Prove it." in readme, "tagline missing"
+    assert "Subagent mode" in readme and "--subagents" in readme, "subagent mode documentation missing"
     alias = (ROOT / "skills/self-correction/SKILL.md").read_text(encoding="utf-8")
     assert "$thoughtloop" in alias and "Deprecated" in alias, "compatibility alias must redirect to ThoughtLoop"
 

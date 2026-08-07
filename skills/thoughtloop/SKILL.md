@@ -1,274 +1,134 @@
 ---
 name: thoughtloop
-description: Use for important tasks that benefit from deliberate solution-space search, strategy selection, implementation, independent verification, and bounded correction. Trigger for hard problems, architecture choices, debugging with multiple hypotheses, rigorous review, deliberate problem solving, self-correction, or requests to improve until evidence-backed criteria pass. Route adaptively: discover only when design freedom warrants it, and verify only as deeply as risk warrants.
+description: Use for important tasks that benefit from deliberate solution search, explicit tradeoffs, implementation, independent evidence, and bounded correction. Adapt the depth to the task. Optional subagent mode adds narrow, fresh-context delegation when its accuracy benefit justifies its cost.
 ---
 
 # ThoughtLoop
 
-Use ThoughtLoop to solve important tasks with two nested loops:
+ThoughtLoop is a lightweight way to solve important problems without either rushing to the first plausible idea or verifying forever.
 
-- an **outer strategic loop** that searches, challenges, and selects approaches;
-- an **inner execution loop** that builds, verifies, judges, and minimally corrects.
-
-The core workflow is:
+Use the mental model:
 
 `DISCOVER -> DECIDE -> EXECUTE -> PROVE`
 
-Do not merely ask the same model to reconsider its answer. Do not verify the first plausible idea so aggressively that you miss a substantially better one.
+The stages are a guide, not a ritual. Skip a stage when it adds no useful signal.
 
-## Core principles
+## Start with a small contract
 
-1. **Diverge before converging when the task has meaningful design freedom.**
-2. **Challenge framing before optimizing inside it.**
-3. **Commit deliberately; do not choose by arbitrary numeric scores.**
-4. **Prefer independent evidence over model confidence.**
-5. **Backtrack at the depth where the failure originates.**
-6. **Use the smallest exploration and verification budgets that fit the task.**
-7. **Bound both brainstorming and correction loops.**
+Before acting, identify as much as is useful of:
 
-When another installed specialist skill is better suited to discovery, implementation, evidence collection, or evaluation, compose with it instead of duplicating domain expertise.
+- the objective and hard requirements;
+- preferences or inherited assumptions that may be revisable;
+- concrete acceptance criteria;
+- facts that could change the approach;
+- the consequence of being wrong;
+- the available time, token, tool, and delegation budget.
 
-## Step 1 — Build the problem contract
+Do not invent requirements. Make important assumptions visible, and keep the contract compact.
 
-Derive a compact state before acting:
+For complex work, use `references/state-contract.md` as optional compact state guidance. Do not create state merely to satisfy a template.
 
-- `objective`: what outcome is needed;
-- `hard_constraints`: user/repository/interface requirements that cannot be violated;
-- `soft_constraints`: preferences and inherited design choices that may be challenged;
-- `acceptance_criteria`: at most 8 concrete criteria for the finished result;
-- `important_unknowns`: facts that could change the approach;
-- `exploration_level`: `0`, `1`, `2`, or `3`;
-- `verification_risk`: `low`, `medium`, or `high`;
-- `max_execution_revisions`: default `3`;
-- `max_strategic_backtracks`: default `2`;
-- `max_discovery_passes`: default `2`.
+## Choose the least expensive useful path
 
-Do not invent hidden user requirements. Derive constraints and criteria from the request, repository instructions, tests, specifications, observed behavior, and authoritative sources.
+- **Direct:** execute and run proportionate checks for mechanical or tightly specified work.
+- **Deliberate:** explore a few genuinely different approaches, then choose one when design freedom matters.
+- **Deep:** challenge the framing as well when the task involves architecture, difficult debugging, costly reversals, or uncertain assumptions.
 
-Read `references/routing.md` when exploration or verification intensity is not obvious.
+Increase verification with the consequence of failure. High verification risk does not automatically require broad brainstorming.
 
-## Step 2 — Route exploration separately from verification
+## Optional subagent mode
 
-Exploration and verification answer different questions:
+Activate it explicitly with wording such as:
 
-- **Exploration:** Are we solving the problem in the best available way?
-- **Verification:** Did the chosen solution actually satisfy the requirements?
+```text
+$thoughtloop --subagents --budget=balanced <task>
+```
 
-### Exploration level 0 — Execute
+or:
 
-Use when the task is mechanical, tightly specified, or has one obvious implementation path.
+```text
+Use ThoughtLoop in subagent mode for this task.
+```
 
-`Builder -> Prove`
+When active:
 
-### Exploration level 1 — Consider alternatives
+1. Set `delegation.mode=subagents` and use the requested budget. If no budget is given, use `balanced`.
+2. Keep the parent agent responsible for the contract, synthesis, edits, final verdict, and user communication.
+3. Delegate narrow, independent questions or review slices. Do not send the whole task to several agents and compare prose.
+4. Give each agent only the relevant objective, criteria, files, and evidence. Start with a fresh context (`fork_context=false` or the platform equivalent) unless inherited context is specifically needed. Never request hidden chain-of-thought.
+5. Use lower-cost agents for bounded exploration, mechanical inspection, or first-pass review when adequate. Reserve the strongest available reasoning for difficult tradeoffs, synthesis, disputed evidence, and final decisions.
+6. Parallelize only independent work. Apply these starting budgets, adjusting for risk and available tooling:
+   - `light`: one narrow subtask;
+   - `balanced`: up to two complementary subtasks, normally search plus evidence/review;
+   - `deep`: up to three complementary subtasks, with at most one follow-up round after new evidence or a concrete disagreement.
+   Across all budgets, allow at most one follow-up delegation round. If that does not resolve the issue, synthesize, verify, or escalate rather than spawning indefinitely.
+7. Treat agent output as evidence or advice, not authority. Resolve disagreement with tests, sources, or a focused follow-up rather than a vote.
+8. Do not spend delegation budget when the task is already clear, cheap to verify, or blocked by missing information. If the platform cannot provide subagents, continue in parent-only mode and report that limitation.
 
-Use when a moderate design choice exists.
+Useful assignments include:
 
-`Explorer(about 3 approaches) -> Synthesizer -> Execute -> Prove`
+- one agent searches solution families;
+- one challenges assumptions or reviews a disjoint risk area;
+- one gathers evidence or runs a targeted check;
+- one reviews the integrated result for regressions.
 
-### Exploration level 2 — Deep search
+The parent should pass concise findings between stages rather than replaying every agent transcript.
 
-Use for architecture, difficult debugging, significant refactors, or decisions with several plausible strategies.
+## Discover
 
-`Explorer -> Challenger -> Synthesizer -> Execute -> Prove`
+When alternatives could materially change the result, use `$explorer` to cover different solution families, not cosmetic variants. Use `$challenger` when the framing or an inherited constraint may be wrong. Stop when relevant families are covered or an experiment is more valuable than more ideation.
 
-### Exploration level 3 — Open problem
+Read `references/routing.md` when the appropriate depth or verification risk is unclear, and `references/solution-space-search.md` when discovery needs more structure.
 
-Use for ambiguous, strategic, novel, or high-leverage problems where framing itself may be wrong.
+## Decide
 
-Use orthogonal discovery lenses, an idea graph when helpful, and up to the bounded discovery budget. Prefer experiments over endless ideation when remaining uncertainty is empirical.
+Use `$synthesizer` when there are meaningful alternatives. Eliminate hard-constraint violations, make tradeoffs explicit, combine strengths only when the hybrid stays understandable, and identify decision-sensitive unknowns. Choose to `BUILD`, `EXPERIMENT`, or `EXPLORE`; do not use arbitrary scores unless the task has a real scoring model.
 
-Do not invoke discovery stages just to spend tokens.
+## Execute
 
-## Step 3 — DISCOVER
+Use `$builder` to implement the selected approach. Preserve hard requirements and passing behavior. If implementation evidence invalidates the approach, surface the strategic problem instead of silently changing direction. Revisions should be narrow unless deeper evidence requires backtracking.
 
-When `exploration_level > 0`, invoke `$explorer` when available.
+## Prove
 
-The Explorer should search **materially different solution families**, not generate cosmetic variants. It should expose unexplored branches and identify experiments that could discriminate between leading ideas.
+Use `$ground-truth-verifier` for the strongest practical independent evidence, then `$judge` to compare that evidence with the criteria. Runtime behavior, tests, type checks, deterministic checks, authoritative sources, and raw calculations usually outrank model opinion. Missing evidence is `UNKNOWN`, not `PASS`.
 
-When `exploration_level >= 2`, the framing is uncertain, or the obvious solution may be locally optimal, invoke `$challenger`.
+Read `references/evidence-ladder.md` when evidence sources compete.
 
-The Challenger should distinguish:
+Use `$adversarial-review` after ordinary checks for high-risk work or when explicitly requested. Keep hypotheses separate from confirmed findings.
 
-- hard constraints;
-- evidence-backed assumptions;
-- inherited conventions;
-- conveniences;
-- unknowns.
+## Correct at the right depth
 
-Do not let the Challenger override explicit hard requirements without evidence.
+After a failure, use `$revision-manager` or equivalent reasoning to decide whether it is:
 
-Read `references/solution-space-search.md` for search lenses and stopping rules.
+- `IMPLEMENTATION` — the approach is sound but the artifact is wrong;
+- `STRATEGY` — the chosen approach is structurally poor;
+- `ASSUMPTION_OR_FRAME` — a premise or boundary was falsified;
+- `EVIDENCE_GAP` — the result is not established yet;
+- `CONTRADICTION_OR_LIMIT` — requirements, tools, permissions, or budget prevent a defensible result.
 
-## Step 4 — DECIDE
+Revise locally only for implementation failures. Backtrack to the relevant stage for deeper failures. Do not oscillate between the same options without new evidence.
 
-Invoke `$synthesizer` when discovery produced multiple meaningful approaches.
+Read `references/failure-depth.md` when the correct route is unclear.
 
-The Synthesizer should:
+## Stop and deliver
 
-- eliminate hard-constraint violations and dominated options;
-- combine compatible strengths where useful;
-- expose tradeoffs and decision-sensitive unknowns;
-- choose `BUILD`, `EXPERIMENT`, or `EXPLORE`;
-- avoid arbitrary numeric scoring.
+Stop when the required criteria are supported, or explain precisely what remains unknown or blocked. Bound discovery, revisions, and delegation according to risk and budget. A useful handoff states:
 
-If a cheap experiment can decide between leading strategies, run the experiment before committing. Treat experiments as evidence, not as another brainstorming turn.
+- what was decided and why;
+- what changed;
+- what evidence was collected;
+- which criteria are `PASS`, `FAIL`, or `UNKNOWN`;
+- remaining risks and the next useful action.
 
-Stop discovery when new ideas are mostly variants, relevant solution families are covered, or remaining uncertainty requires evidence rather than more ideation.
+Never require or record hidden chain-of-thought. Keep alternatives, assumptions, decisions, evidence, tests, and concise rationales.
 
-## Step 5 — EXECUTE
+## Composition
 
-Invoke `$builder` when available.
+Use specialist skills as needed:
 
-Give the Builder the **selected strategy**, task contract, and relevant evidence. Do not give it the entire rejected-idea transcript unless needed.
+- `$explorer`, `$challenger`, and `$synthesizer` for discovery and decisions;
+- `$builder` and `$revision-manager` for execution;
+- `$ground-truth-verifier`, `$judge`, and `$adversarial-review` for proof;
+- `$loop-evaluator` to improve the problem-solving process itself.
 
-The Builder should produce a complete artifact plus observable assumptions, unresolved uncertainties, and recommended checks. It is not the final authority on correctness.
-
-For a revision, provide only:
-
-- current artifact or relevant patch context;
-- failed/unknown blocking criteria;
-- supporting evidence;
-- the selected strategy and invariants;
-- the minimal correction plan.
-
-## Step 6 — PROVE with independent evidence
-
-Invoke `$ground-truth-verifier` when available.
-
-Use the strongest practical evidence source. Read `references/evidence-ladder.md` when choosing between alternatives.
-
-Examples:
-
-- runtime behavior;
-- compiler/type-checker output;
-- unit/integration tests;
-- static analysis;
-- repository specifications;
-- primary sources and official documentation;
-- raw data and recalculation;
-- deterministic structural checks.
-
-A model's assertion that something is correct is not ground truth.
-
-Then invoke `$judge` when available.
-
-Every criterion receives exactly one status:
-
-- `PASS` — sufficient evidence supports compliance;
-- `FAIL` — evidence demonstrates noncompliance;
-- `UNKNOWN` — available evidence cannot establish the criterion.
-
-Never convert `UNKNOWN` into `PASS` for convenience.
-
-## Step 7 — Classify failure depth before retrying
-
-Do not assume every failure should trigger another implementation edit.
-
-Classify a blocking failure as one of:
-
-### `IMPLEMENTATION`
-
-The strategy remains sound; the artifact is wrong or incomplete.
-
-Route:
-
-`Revision Manager -> Builder -> Prove`
-
-### `STRATEGY`
-
-Repeated or structural evidence shows the selected approach is poorly suited, excessively complex, or unable to satisfy the criteria economically.
-
-Route:
-
-`Synthesizer -> choose another/hybrid strategy -> Execute -> Prove`
-
-### `ASSUMPTION_OR_FRAME`
-
-Evidence falsifies an assumption or reveals that the problem boundary is wrong.
-
-Route:
-
-`Challenger / Explorer -> Synthesizer -> Execute -> Prove`
-
-### `EVIDENCE_GAP`
-
-The artifact may be correct, but the needed fact is unknown.
-
-Route:
-
-`Verifier / discriminating experiment -> Judge`
-
-Do not rewrite code merely to compensate for unavailable evidence.
-
-### `CONTRADICTION_OR_LIMIT`
-
-Requirements conflict, permissions/tools are insufficient, or the task cannot be established within the available system.
-
-Route:
-
-`Escalate / report unresolved state`
-
-Read `references/failure-depth.md` for the routing contract.
-
-## Step 8 — Revise minimally when the failure is implementation-level
-
-Invoke `$revision-manager` when available.
-
-The correction plan should:
-
-- target blocking failures first;
-- preserve already-passing behavior and strategic invariants;
-- identify regression-sensitive areas;
-- avoid broad rewrites unless evidence requires them;
-- recommend a deeper backtrack if the failure is structural rather than local.
-
-After revision, rerun all checks plausibly affected by the change.
-
-## Step 9 — Adversarial review when justified
-
-For high verification risk or explicitly requested rigorous review, invoke `$adversarial-review` after ordinary criteria pass.
-
-Treat adversarial findings as hypotheses until evidence supports them. Confirmed findings re-enter the failure-depth router rather than automatically causing local revisions.
-
-## Step 10 — Bound both loops
-
-Deliver when all required criteria are `PASS` and no justified strategic concern remains unresolved.
-
-Stop or escalate when any applies:
-
-- `max_execution_revisions` is reached;
-- the same blocking implementation failure persists across two revisions;
-- `max_strategic_backtracks` is reached;
-- `max_discovery_passes` is reached;
-- new discovery produces only near-duplicates;
-- requirements are contradictory;
-- required evidence is inaccessible;
-- the latest attempt makes no measurable progress;
-- a high-risk blocking `UNKNOWN` remains unresolved.
-
-Do not keep brainstorming or correcting indefinitely.
-
-## Step 11 — Deliver
-
-Return:
-
-1. the finished artifact or completed change;
-2. the selected approach and any material tradeoff worth preserving;
-3. a concise verification summary;
-4. any material unresolved `UNKNOWN` items;
-5. what was actually tested, measured, or checked.
-
-Do not expose or require hidden chain-of-thought. Record observable evidence, alternatives, decisions, critiques, tests, and concise rationales only.
-
-## Composition with other skills
-
-Specialist skills may act as nodes in any stage:
-
-- architecture/design skills can feed Discover;
-- benchmarking/profiling skills can run discriminating experiments;
-- domain implementation skills can feed Execute;
-- security/testing/source-retrieval skills can feed Prove;
-- language/style standards can become explicit Judge criteria.
-
-Prefer specialist capabilities over generic model critique.
+Prefer domain-specific skills when they provide stronger evidence or implementation knowledge.

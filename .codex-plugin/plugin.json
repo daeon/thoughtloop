@@ -1,7 +1,7 @@
 {
   "name": "thoughtloop",
-  "version": "0.3.0",
-  "description": "Deliberate problem solving for coding agents: discover solution families, challenge assumptions, decide with evidence, execute deliberately, and independently prove the result.",
+  "version": "0.4.0",
+  "description": "Adaptive deliberate problem solving for coding agents: search when useful, decide with tradeoffs, execute economically, prove with evidence, and optionally delegate bounded work to subagents.",
   "license": "MIT",
   "keywords": [
     "agent-skills",
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "ThoughtLoop",
     "shortDescription": "Think wider. Build better. Prove it.",
-    "longDescription": "A composable Codex skill pack for deliberate problem solving. ThoughtLoop searches the solution space when warranted, challenges assumptions before commitment, selects using explicit tradeoffs, executes economically, verifies with independent evidence, and backtracks at the correct failure depth.",
+    "longDescription": "A composable Codex skill pack for deliberate problem solving. ThoughtLoop adapts search and verification to the task, challenges assumptions before commitment, executes economically, verifies with independent evidence, and optionally uses bounded fresh-context subagents when the accuracy benefit justifies the cost.",
     "developerName": "ThoughtLoop contributors",
     "category": "Productivity",
     "capabilities": [
@@ -32,8 +32,8 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Use ThoughtLoop to search the solution space when warranted, select deliberately, execute economically, and independently prove the result.",
-      "Challenge the framing before committing, then backtrack at the correct failure depth if evidence disproves the implementation, strategy, or assumptions."
+      "Use ThoughtLoop to search only when alternatives matter, select deliberately, execute economically, and independently prove the result.",
+      "When explicitly requested, use bounded fresh-context subagents for independent search or review while keeping decisions and final synthesis in the parent."
     ]
   }
 }

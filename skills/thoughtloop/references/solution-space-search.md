@@ -1,62 +1,18 @@
 # Solution-space search
 
-Discovery should maximize **meaningful coverage per token**, not raw idea count.
+Optimize for meaningful coverage per token, not idea count.
 
-## Search dimensions
+Look for differences in architecture or boundary, state ownership, timing, mechanism, operational burden, cost/performance, user interaction, and assumptions. Select the lenses that fit the task:
 
-Look for approaches that differ across dimensions such as:
-
-- architecture/boundary;
-- state ownership;
-- timing (precompute, runtime, asynchronous, event-driven);
-- mechanism (cache, queue, index, protocol, algorithm);
-- operational complexity;
-- cost/performance profile;
-- user interaction model;
-- assumption set.
-
-## Orthogonal lenses
-
-Use a subset appropriate to the task:
-
-- simplest possible;
-- highest performance;
-- lowest operational burden;
-- exploit what already exists;
-- remove the requirement;
+- simplest credible solution;
+- highest performance or lowest cost;
+- exploit existing capability;
+- remove or move the work;
 - change the boundary;
-- move work earlier/later;
-- invert a key constraint;
 - solve the upstream cause;
+- invert a key constraint;
 - use an adjacent-domain analogy.
 
-## Diversity test
+Two options are not materially different when they keep the same architecture, assumptions, and mechanism and only change libraries, wording, or minor details.
 
-Two options are not materially different if they keep the same architecture, assumptions, and mechanism but change only libraries, naming, formatting, or minor implementation details.
-
-## Idea graph
-
-Group related approaches under parent strategies. Use the graph to detect overexplored branches and unvisited families.
-
-## Experiments over speculation
-
-When the decision depends on an empirical unknown, stop ideating and define the smallest discriminating experiment.
-
-A useful experiment states:
-
-- hypothesis/unknown;
-- competing approaches;
-- measurement;
-- expected outcomes;
-- which outcome favors which approach;
-- cost/time/risk of the experiment.
-
-## Discovery stopping rules
-
-Stop when:
-
-1. new ideas are mostly variants;
-2. major relevant strategy families are represented;
-3. one strategy dominates on hard constraints and material tradeoffs;
-4. remaining uncertainty requires evidence;
-5. the discovery budget is exhausted.
+When a decision depends on an empirical unknown, define the smallest experiment that measures it, states the competing hypotheses, and explains which outcome changes the choice. Stop when relevant families are covered, ideas become variants, one option dominates the important constraints, or evidence is now more valuable than ideation.
