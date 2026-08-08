@@ -53,6 +53,7 @@ def main() -> int:
             assert route.index("verify") < route.index("final-judgment"), f"verification order: {case['id']}"
             if "review" in route:
                 assert route.index("review") < route.index("final-judgment"), f"review order: {case['id']}"
+            assert route[-1] == "final-judgment", f"final stage: {case['id']}"
         elif kind == "continuity":
             assert "thoughtloop" in route and route[-1] == "handoff", f"continuity route: {case['id']}"
         else:

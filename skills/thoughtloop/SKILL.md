@@ -67,6 +67,32 @@ Evidence outranks confidence. An unavailable check is `UNKNOWN`, not an
 implicit pass. A final `PASS` requires every blocking criterion to have
 sufficient supporting evidence and no unresolved blocking review finding.
 
+## Specialist-independent fallback
+
+When a selected public specialist cannot be loaded, continue with these
+minimum stage behaviors instead of treating the graph edge as executable code:
+
+- **Discover:** identify materially different solution or explanation families,
+  expose assumptions, and name the cheapest falsifier for each important
+  difference.
+- **Decide:** choose `BUILD`, `EXPERIMENT`, or `EXPLORE`; preserve rejected
+  approaches and state which evidence would change the choice.
+- **Execute:** make the smallest coherent authorized change and preserve passing
+  behavior.
+- **Verify:** gather criterion-specific evidence, provenance, and limitations;
+  separate supporting, failing, and inconclusive results.
+- **Review:** for high-risk or subtle work, seek counterexamples, regressions,
+  security issues, contradictions, and coverage gaps.
+- **Final judgment:** derive criterion-level `PASS`, `FAIL`, or `UNKNOWN` from
+  all verification and review evidence; do not pass with unresolved blocking
+  review findings.
+- **Correct:** classify the failure depth and return to the stage that owns the
+  wrong assumption.
+
+These fallbacks are sufficient to complete every route with only the installed
+`thoughtloop` directory present. Specialist instructions add depth; they are
+not runtime dependencies.
+
 ## Optional subagent mode
 
 Delegation is opt-in. Use bounded independent questions only when they add
