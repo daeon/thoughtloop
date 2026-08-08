@@ -9,4 +9,6 @@ Establish what can be known from evidence. For each material criterion, choose t
 
 Return an `EvidenceSet` with criterion, check, observable result, provenance, and limitations. Separate supporting evidence, failing evidence, and inconclusive evidence. A green check supports only the behavior it covers.
 
-Unavailable evidence is `UNKNOWN`. Do not issue the final verdict; `$judge` does that. Do not rewrite the artifact to make a check pass.
+Unavailable evidence is `UNKNOWN`. Do not issue the final outcome; the
+orchestrator's `final-judgment` stage does that. Do not rewrite the artifact to
+make a check pass.
