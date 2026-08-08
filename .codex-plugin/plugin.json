@@ -1,6 +1,9 @@
 {
   "name": "thoughtloop",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "author": {
+    "name": "Damon Chitsaz"
+  },
   "description": "A cohesive, composable Codex skill pack with one adaptive graph, shared evidence contracts, and independent capability nodes.",
   "license": "MIT",
   "keywords": [
@@ -25,17 +28,17 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "ThoughtLoop",
-    "shortDescription": "Think wider. Build better. Prove it.",
+    "shortDescription": "Deliberate coding workflows",
     "longDescription": "A cohesive Codex skill pack with one adaptive orchestrator, reusable discovery, investigation, decision, execution, verification, review, handoff, and writing nodes, shared observable contracts, and bounded fresh-context subagents when the accuracy benefit justifies the cost.",
-    "developerName": "ThoughtLoop contributors",
-    "category": "Productivity",
+    "developerName": "Damon Chitsaz",
+    "category": "Developer Tools",
     "capabilities": [
       "Read",
       "Write"
     ],
     "defaultPrompt": [
-      "Use ThoughtLoop to search only when alternatives matter, select deliberately, execute economically, and independently prove the result.",
-      "When explicitly requested, use bounded fresh-context subagents for independent search or review while keeping decisions and final synthesis in the parent."
+      "Use ThoughtLoop to explore important alternatives, make the change, and prove the result.",
+      "Use ThoughtLoop with bounded subagents to investigate and review this task."
     ]
   }
 }

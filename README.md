@@ -5,7 +5,7 @@
 [![Validate](https://github.com/daeon/thoughtloop/actions/workflows/validate.yml/badge.svg)](https://github.com/daeon/thoughtloop/actions/workflows/validate.yml)
 [![GitHub stars](https://img.shields.io/github/stars/daeon/thoughtloop?style=flat-square)](https://github.com/daeon/thoughtloop/stargazers)
 [![License](https://img.shields.io/github/license/daeon/thoughtloop?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-1f6feb?style=flat-square)](.codex-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-2.0.0-1f6feb?style=flat-square)](.codex-plugin/plugin.json)
 [![Codex skill pack](https://img.shields.io/badge/Codex-skill%20pack-6e56cf?style=flat-square)](https://github.com/daeon/thoughtloop)
 
 > **Think wider. Build better. Prove it.**
