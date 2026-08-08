@@ -5,7 +5,7 @@ are independently callable and may receive compact state from the orchestrator.
 
 | Node | Responsibility | Default posture |
 |---|---|---|
-| thoughtloop | Route, execute, judge, correct, and preserve state | adaptive orchestration |
+| thoughtloop | Route, execute, apply final judgment, correct, and preserve state | adaptive orchestration |
 | gapfinder | Surface expensive unknowns and choose discovery depth | bounded reconnaissance |
 | discover | Search options, challenge framing, or build probes | no commitment |
 | investigate | Map code, debug failures, analyze logs, or measure performance | read-only |

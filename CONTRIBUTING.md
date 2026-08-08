@@ -20,6 +20,8 @@ Run the required checks from the repository root:
 python tests/validate_pack.py
 python tests/validate_graph.py
 python scripts/calculate_metrics.py examples/sample-loop-log.jsonl
+python scripts/run_behavioral_evals.py --validate-only
+python -m unittest discover -s tests -p 'test_*.py' -v
 git diff --check
 ```
 
