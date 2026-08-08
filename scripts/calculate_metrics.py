@@ -6,9 +6,65 @@ import argparse
 import json
 from pathlib import Path
 
+BOOL_FIELDS = {
+    "exploration_used",
+    "experiment_before_commit",
+    "approach_switched",
+    "approach_switch_success",
+    "first_pass",
+    "success",
+    "escalated",
+    "repeated_failure",
+}
+INT_FIELDS = {
+    "approach_count",
+    "near_duplicate_ideas",
+    "strategic_backtracks",
+    "assumption_backtracks",
+    "revisions",
+    "blocking_failures_resolved",
+    "regressions_introduced",
+    "tokens",
+}
+NUMBER_FIELDS = {"cost", "runtime_seconds"}
+VERDICTS = {"PASS", "FAIL", "UNKNOWN"}
+
 
 def rate(num: int, den: int):
     return None if den == 0 else num / den
+
+
+def validate_row(row: object, line_number: int) -> dict:
+    if not isinstance(row, dict):
+        raise ValueError(f"line {line_number}: expected a JSON object")
+
+    for field in BOOL_FIELDS:
+        if field in row and not isinstance(row[field], bool):
+            raise ValueError(f"line {line_number}: {field} must be boolean")
+    for field in INT_FIELDS:
+        if field in row and (not isinstance(row[field], int) or isinstance(row[field], bool)):
+            raise ValueError(f"line {line_number}: {field} must be an integer")
+    for field in NUMBER_FIELDS:
+        if field in row and (not isinstance(row[field], (int, float)) or isinstance(row[field], bool)):
+            raise ValueError(f"line {line_number}: {field} must be numeric")
+    if "final_verdict" in row and row["final_verdict"] not in VERDICTS:
+        raise ValueError(f"line {line_number}: final_verdict must be PASS, FAIL, or UNKNOWN")
+    if "ground_truth_good" in row and row["ground_truth_good"] is not None and not isinstance(row["ground_truth_good"], bool):
+        raise ValueError(f"line {line_number}: ground_truth_good must be boolean or null")
+    return row
+
+
+def load_rows(path: Path) -> list[dict]:
+    rows = []
+    for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            raw = json.loads(line)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"line {i}: invalid JSON: {e}") from e
+        rows.append(validate_row(raw, i))
+    return rows
 
 
 def main() -> int:
@@ -16,14 +72,10 @@ def main() -> int:
     ap.add_argument("jsonl", type=Path)
     args = ap.parse_args()
 
-    rows = []
-    for i, line in enumerate(args.jsonl.read_text(encoding="utf-8").splitlines(), 1):
-        if not line.strip():
-            continue
-        try:
-            rows.append(json.loads(line))
-        except json.JSONDecodeError as e:
-            raise SystemExit(f"line {i}: invalid JSON: {e}")
+    try:
+        rows = load_rows(args.jsonl)
+    except ValueError as e:
+        raise SystemExit(str(e)) from e
 
     n = len(rows)
     successes = [r for r in rows if r.get("success") is True]

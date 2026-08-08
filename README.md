@@ -206,6 +206,33 @@ The validator uses only the Python standard library. The metrics script reports 
 
 The same checks run in [GitHub Actions](.github/workflows/validate.yml) for pushes and pull requests.
 
+## Behavioral evaluations
+
+Structural validation proves pack invariants; it does not prove that an agent
+will choose the right route for every prompt. The labeled corpus in
+[`evals/cases.jsonl`](evals/cases.jsonl) covers activation, route depth,
+authorization boundaries, missing evidence, review findings, backtracking,
+delegation budgets, and standalone operation.
+
+Validate the corpus without invoking an agent:
+
+```bash
+python scripts/run_behavioral_evals.py --validate-only
+```
+
+Run model-backed traces with a host command when the environment provides one:
+
+```bash
+python scripts/run_behavioral_evals.py --runner codex exec --output evals/runs/local.json
+```
+
+The runner captures prompts, observable route/verdict fields when the host
+returns structured JSON, bounded stdout/stderr, delegation observations, and
+runtime. It does not claim a pass rate when the host emits no structured
+observation. The first release baseline is kept in
+[`evals/baselines/2.0.0.json`](evals/baselines/2.0.0.json) and remains pending
+until a real model-backed run is captured.
+
 ## Roadmap
 
 ThoughtLoop is deliberately small. The next useful improvements are:
