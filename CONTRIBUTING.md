@@ -7,7 +7,7 @@ ThoughtLoop is a small, contract-driven skill pack. Contributions are welcome wh
 - Preserve the public architecture: **Discover → Decide → Execute → Prove**.
 - Keep `thoughtloop` as the only implicitly invoked skill.
 - Keep the canonical nodes independently callable; do not add compatibility aliases or a second orchestrator.
-- Extend `core/contracts.md` and `core/routing.md` rather than creating parallel state or orchestration policies.
+- Extend the installed references under `skills/thoughtloop/references/` rather than creating parallel state or orchestration policies.
 - Treat evidence as stronger than confidence. Missing evidence remains `UNKNOWN`.
 - Never request or record hidden chain-of-thought. Keep observable evidence, alternatives, decisions, tests, critiques, and concise rationales.
 - Keep exploration, revisions, and delegation bounded.
@@ -19,7 +19,7 @@ Run the required checks from the repository root:
 ```bash
 python tests/validate_pack.py
 python tests/validate_graph.py
-python skills/evaluate/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
+python scripts/calculate_metrics.py examples/sample-loop-log.jsonl
 git diff --check
 ```
 

@@ -9,10 +9,10 @@ engineering route
   -> Gapfinder when assumptions or unknowns are expensive
   -> Investigate(repository | debugging | logs | performance)
   -> Decide(select | plan)
-  -> Builder
+  -> Execute
   -> Verify
-  -> Judge
   -> Review for high-risk changes
+  -> Final judgment
 ```
 
 Read-only investigation remains read-only until the user requests a change.

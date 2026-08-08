@@ -1,5 +1,0 @@
-interface:
-  display_name: "Judge"
-  short_description: "Verdict against explicit criteria and evidence"
-policy:
-  allow_implicit_invocation: false

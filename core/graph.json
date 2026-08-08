@@ -6,13 +6,13 @@
     {"name": "discover", "implicit": false, "modes": ["solutions", "challenge", "prototype"]},
     {"name": "investigate", "implicit": false, "modes": ["repository", "debugging", "logs", "performance"]},
     {"name": "decide", "implicit": false, "modes": ["select", "plan"]},
-    {"name": "builder", "implicit": false},
     {"name": "verify", "implicit": false},
-    {"name": "judge", "implicit": false},
     {"name": "review", "implicit": false},
-    {"name": "revise", "implicit": false},
-    {"name": "handoff", "implicit": false},
-    {"name": "evaluate", "implicit": false},
-    {"name": "standard-english", "implicit": false}
+    {"name": "handoff", "implicit": false}
+  ],
+  "internal": [
+    {"name": "execute", "owner": "thoughtloop"},
+    {"name": "final-judgment", "owner": "thoughtloop"},
+    {"name": "correct", "owner": "thoughtloop"}
   ]
 }

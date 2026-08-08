@@ -6,13 +6,13 @@ Use the smallest route that can establish the requested result.
 task
   -> ThoughtLoop intake
   -> [unknowns or material choice?]
-       no  -> Builder
+       no  -> Execute
        yes -> Gapfinder -> Discover or Investigate -> Decide
-  -> Verify -> Judge
+  -> Verify -> Final judgment
   -> [high consequence or subtle risk?]
-       yes -> Review
+       yes -> Review -> Final judgment
        no  -> stop
-  -> [failure or unknown?] -> Revise at the correct depth
+  -> [failure or unknown?] -> Correct at the correct depth
 ```
 
 The graph is lazy. Nodes are selected by evidence and consequence of being

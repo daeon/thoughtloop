@@ -7,9 +7,9 @@ symptom
   -> [root cause supported?]
        no  -> Verify or gather the next probe
        yes -> Decide
-  -> Builder when a fix is authorized
+  -> Execute when a fix is authorized
   -> Verify regression and reproduction checks
-  -> Judge
+  -> Final judgment
 ```
 
 Do not patch a plausible hypothesis merely because it is attractive. If two
