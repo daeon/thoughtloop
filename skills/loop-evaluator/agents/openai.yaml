@@ -1,5 +1,0 @@
-interface:
-  display_name: "Loop Evaluator"
-  short_description: "Measure search, decision, correction, and proof quality"
-policy:
-  allow_implicit_invocation: false

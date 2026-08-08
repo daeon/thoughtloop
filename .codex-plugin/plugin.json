@@ -1,11 +1,12 @@
 {
   "name": "thoughtloop",
-  "version": "0.4.0",
-  "description": "A composable Codex skill pack that helps coding agents explore alternatives, choose deliberately, execute economically, and prove results with evidence.",
+  "version": "1.0.0",
+  "description": "A cohesive, composable Codex skill pack with one adaptive graph, shared evidence contracts, and independent capability nodes.",
   "license": "MIT",
   "keywords": [
     "agent-skills",
     "agent-workflows",
+    "composable-graph",
     "architecture",
     "brainstorming",
     "codex",
@@ -18,7 +19,6 @@
     "prompt-engineering",
     "quality",
     "reasoning",
-    "self-correction",
     "skills",
     "verification"
   ],
@@ -26,7 +26,7 @@
   "interface": {
     "displayName": "ThoughtLoop",
     "shortDescription": "Think wider. Build better. Prove it.",
-    "longDescription": "A composable Codex skill pack for deliberate problem solving. ThoughtLoop adapts search and verification to the task, challenges assumptions before commitment, executes economically, verifies with independent evidence, and optionally uses bounded fresh-context subagents when the accuracy benefit justifies the cost.",
+    "longDescription": "A cohesive Codex skill pack with one adaptive orchestrator, reusable discovery, investigation, decision, execution, verification, review, handoff, and writing nodes, shared observable contracts, and bounded fresh-context subagents when the accuracy benefit justifies the cost.",
     "developerName": "ThoughtLoop contributors",
     "category": "Productivity",
     "capabilities": [

@@ -5,12 +5,12 @@
 [![Validate](https://github.com/daeon/thoughtloop/actions/workflows/validate.yml/badge.svg)](https://github.com/daeon/thoughtloop/actions/workflows/validate.yml)
 [![GitHub stars](https://img.shields.io/github/stars/daeon/thoughtloop?style=flat-square)](https://github.com/daeon/thoughtloop/stargazers)
 [![License](https://img.shields.io/github/license/daeon/thoughtloop?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.4.0-1f6feb?style=flat-square)](.codex-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.0-1f6feb?style=flat-square)](.codex-plugin/plugin.json)
 [![Codex skill pack](https://img.shields.io/badge/Codex-skill%20pack-6e56cf?style=flat-square)](https://github.com/daeon/thoughtloop)
 
 > **Think wider. Build better. Prove it.**
 
-ThoughtLoop is a composable Codex skill pack for solving important tasks without rushing to the first plausible answer or verifying forever. It searches when alternatives matter, challenges weak framing, makes tradeoffs explicit, executes economically, and checks the result with independent evidence.
+ThoughtLoop is one installable Codex skill pack with one adaptive orchestrator, shared graph contracts, and independently callable capability nodes. It searches when alternatives matter, makes tradeoffs explicit, executes economically, and proves results with independent evidence.
 
 The architecture is intentionally simple:
 
@@ -23,13 +23,14 @@ The stages are adaptive guidance, not a mandatory ceremony. Small tasks stay sma
 ## Table of contents
 
 - [Why ThoughtLoop](#why-thoughtloop)
+- [Canonical graph](#canonical-graph)
 - [How it works](#how-it-works)
+- [Independent nodes](#independent-nodes)
 - [What's included](#whats-included)
 - [Subagent mode](#subagent-mode)
 - [Quick start](#quick-start)
 - [Install](#install)
 - [Validate](#validate)
-- [Compatibility](#compatibility)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [Security](#security)
@@ -63,21 +64,71 @@ The four stages answer different questions:
 3. **Execute:** What is the smallest coherent change that satisfies the contract?
 4. **Prove:** What evidence supports the result, what failed, and what remains unknown?
 
+## Canonical graph
+
+```mermaid
+flowchart TD
+    T[Task] --> G{Unknowns or material choice?}
+    G -->|No| B[Builder]
+    G -->|Yes| F[Gapfinder]
+    F --> D[Discover or Investigate]
+    D --> S[Decide]
+    S --> B
+    B --> V[Verify]
+    V --> J[Judge]
+    J --> R{High risk or subtle?}
+    R -->|Yes| X[Review]
+    R -->|No| O[Outcome]
+    X --> O
+    J --> M{Failure or unknown?}
+    M -->|Yes| Q[Revise]
+    Q --> D
+```
+
+The graph is a set of reusable nodes, not one giant skill. Shared contracts in
+[`core/contracts.md`](core/contracts.md) carry observable state between nodes;
+[`core/routing.md`](core/routing.md) defines their boundaries.
+
+### Canonical nodes
+
+| Node | Responsibility |
+|---|---|
+| `thoughtloop` | Adaptive routing, execution gates, proof, correction, and delegation |
+| `gapfinder` | Expensive unknowns and discovery-depth selection |
+| `discover` | Solution search, framing challenge, and disposable prototypes |
+| `investigate` | Repository, debugging, log, and performance forensics |
+| `decide` | Evidence-backed selection and risk-first planning |
+| `builder` | Smallest coherent implementation or revision |
+| `verify` | Independent evidence collection |
+| `judge` | Criterion-level `PASS`, `FAIL`, or `UNKNOWN` |
+| `review` | Post-check red-team review |
+| `revise` | Failure-depth routing |
+| `handoff` | Compact continuation state |
+| `evaluate` | Loop and budget evaluation |
+| `standard-english` | Optional explicit language and documentation standards |
+
+## Independent nodes
+
+Every canonical node can be invoked directly when a task needs one capability.
+The node can also receive state from `thoughtloop` through the shared contracts.
+There is one public name per responsibility; modes belong inside the owning
+node rather than being exposed as duplicate compatibility skills.
+
 ## What's included
 
 | Stage | Skill | Purpose |
 |---|---|---|
 | Orchestration | `thoughtloop` | Routes the appropriate amount of search, execution, proof, correction, and optional delegation. |
-| Compatibility | `self-correction` | Deprecated explicit alias that redirects to `thoughtloop`. |
-| Discover | `explorer` | Covers materially different solution families. |
-| Discover | `challenger` | Tests framing and inherited assumptions before commitment. |
-| Decide | `synthesizer` | Chooses, combines, or experimentally distinguishes approaches. |
+| Discover | `gapfinder`, `discover` | Finds expensive unknowns, searches options, challenges framing, and probes concrete alternatives. |
+| Investigate | `investigate` | Maps repositories, debugs failures, analyzes logs, and measures performance without editing by default. |
+| Decide | `decide` | Selects an approach or creates a risk-first implementation plan. |
 | Execute | `builder` | Implements the selected strategy or a targeted revision. |
-| Control | `revision-manager` | Routes failures to the level that is actually wrong. |
-| Prove | `ground-truth-verifier` | Collects independent evidence. |
-| Prove | `judge` | Applies `PASS`, `FAIL`, or `UNKNOWN` to criteria. |
-| Prove | `adversarial-review` | Looks for hidden defects after ordinary checks. |
-| Meta | `loop-evaluator` | Measures loop quality, evidence quality, and budget use. |
+| Control | `revise` | Routes failures to the level that is actually wrong. |
+| Prove | `verify`, `judge`, `review` | Collects evidence, applies criterion-level verdicts, and red-teams high-risk results. |
+| Continuity | `handoff` | Preserves compact state for another agent or session. |
+| Meta | `evaluate` | Measures loop quality, evidence quality, and budget use. |
+| Writing | `standard-english` | Applies explicit language standards only when they materially help. |
+| Public surface | 13 canonical nodes | Keeps focused calls independently usable while preserving one graph vocabulary. |
 
 Only `thoughtloop` permits implicit invocation. The other skills are explicit by default, so they do not trigger on unrelated work.
 
@@ -110,10 +161,10 @@ $thoughtloop Reduce p99 latency in this parsing service without changing its ext
 Use a specialist directly when you want one stage:
 
 ```text
-$explorer Search for materially different ways to reduce p99 latency.
-$challenger Challenge the assumptions behind this architecture.
-$ground-truth-verifier Verify whether this implementation satisfies the stated behavior.
-$adversarial-review Try to break this refactor after its ordinary tests pass.
+$discover Search for materially different ways to reduce p99 latency.
+$investigate Measure the performance bottleneck without editing the repository.
+$verify Verify whether this implementation satisfies the stated behavior.
+$review Try to break this refactor after its ordinary tests pass.
 ```
 
 See the [`examples/`](examples/) directory for coding, research, and constrained-writing workflows.
@@ -146,16 +197,13 @@ Run the pack checks locally:
 
 ```bash
 python tests/validate_pack.py
-python skills/loop-evaluator/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
+python tests/validate_graph.py
+python skills/evaluate/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
 ```
 
 The validator uses only the Python standard library. The metrics script reports signals such as exploration, revisions, regressions, unknowns, cost, tokens, and runtime. Treat those metrics as diagnostic signals, not as a single quality score.
 
 The same checks run in [GitHub Actions](.github/workflows/validate.yml) for pushes and pull requests.
-
-## Compatibility
-
-`$self-correction` remains a deprecated, explicit-only alias for older workflows. New integrations should call `$thoughtloop` directly.
 
 ## Roadmap
 

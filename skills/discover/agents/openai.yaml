@@ -1,0 +1,5 @@
+interface:
+  display_name: "Discover"
+  short_description: "Search, challenge, or prototype before commitment"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gapfinder"
+  short_description: "Surface expensive unknowns before commitment"
+policy:
+  allow_implicit_invocation: false

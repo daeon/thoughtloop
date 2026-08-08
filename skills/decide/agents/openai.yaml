@@ -1,0 +1,5 @@
+interface:
+  display_name: "Decide"
+  short_description: "Choose or plan from evidence and tradeoffs"
+policy:
+  allow_implicit_invocation: false

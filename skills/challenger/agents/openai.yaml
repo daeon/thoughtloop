@@ -1,5 +1,0 @@
-interface:
-  display_name: "Challenger"
-  short_description: "Challenge framing and hidden assumptions before commitment"
-policy:
-  allow_implicit_invocation: false

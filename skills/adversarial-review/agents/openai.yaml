@@ -1,5 +1,0 @@
-interface:
-  display_name: "Adversarial Review"
-  short_description: "Red-team a finished artifact for hidden defects"
-policy:
-  allow_implicit_invocation: false

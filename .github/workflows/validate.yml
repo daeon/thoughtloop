@@ -23,8 +23,11 @@ jobs:
       - name: Validate skill pack
         run: python tests/validate_pack.py
 
+      - name: Validate graph fixtures
+        run: python tests/validate_graph.py
+
       - name: Calculate sample metrics
-        run: python skills/loop-evaluator/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
+        run: python skills/evaluate/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
 
       - name: Check whitespace
         run: git diff --check

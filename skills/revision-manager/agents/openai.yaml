@@ -1,5 +1,0 @@
-interface:
-  display_name: "Revision Manager"
-  short_description: "Plan minimal fixes and guard against regressions"
-policy:
-  allow_implicit_invocation: false

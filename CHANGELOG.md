@@ -1,12 +1,17 @@
 # Changelog
 
-## Unreleased
+## 1.0.0 — 2026-08-07
 
+- Consolidated the pack around one adaptive graph and shared observable contracts.
+- Added canonical `gapfinder`, `discover`, `investigate`, `decide`, `verify`, `review`, `revise`, `handoff`, `evaluate`, and `standard-english` nodes.
+- Removed duplicate capability names and made the canonical nodes the only supported public surface.
+- Added graph examples, budget policy, and graph validation.
 - Refreshed the README around a popular GitHub README structure with clearer positioning, navigation, architecture, quick start, subagent budgets, and project links.
 - Added repository contribution and security guidance.
 - Added a GitHub Actions validation workflow for pushes and pull requests.
 - Removed duplicate marketplace metadata and the obsolete one-time deployment guide.
-- Kept the plugin version at `0.4.0` because the skill contracts and runtime behavior did not change.
+- Removed the deprecated legacy entry-point alias and all references to the old orchestrator name.
+- Bumped the plugin version to `1.0.0` for the cohesive graph and removed duplicate entry points.
 
 ## 0.4.0 — 2026-08-07
 
@@ -19,22 +24,19 @@
 
 - Rebranded the project as **ThoughtLoop**.
 - Added the public tagline: **Think wider. Build better. Prove it.**
-- Renamed the primary orchestrator from `self-correction` to `thoughtloop`.
-- Added an explicit-only deprecated `self-correction` compatibility alias.
+- Renamed the original primary orchestrator to `thoughtloop`.
 - Updated plugin/marketplace metadata, examples, README, installer validation, and repository guidance for GitHub publication.
 - Preserved the **Discover → Decide → Execute → Prove** architecture and all v0.2.0 failure-depth routing semantics.
 
 ## 0.2.0 — 2026-08-07
 
 - Reframed the architecture as **Discover → Decide → Execute → Prove**.
-- Added `explorer` for deliberate solution-space search and idea-graph coverage.
-- Added `challenger` for pre-commitment assumption and framing attacks.
-- Added `synthesizer` for explicit tradeoff-based selection and BUILD / EXPERIMENT / EXPLORE routing.
+- Added deliberate solution-space search, framing challenge, and evidence-backed selection within the owning graph nodes.
 - Added independent `exploration_level` and `verification_risk` routing axes.
 - Added failure-depth classification: IMPLEMENTATION, STRATEGY, ASSUMPTION_OR_FRAME, EVIDENCE_GAP, CONTRADICTION_OR_LIMIT.
 - Added bounded strategic backtracking and anti-oscillation rules.
-- Extended Revision Manager to route deeper failures instead of blindly requesting another edit.
-- Extended Loop Evaluator and sample logs with exploration, experiment, backtrack, and approach-switch metrics.
+- Extended failure routing to distinguish deeper failures instead of blindly requesting another edit.
+- Extended loop metrics and sample logs with exploration, experiment, backtrack, and approach-switch signals.
 - Added solution-space-search and failure-depth reference contracts.
 
 ## 0.1.0 — 2026-08-07

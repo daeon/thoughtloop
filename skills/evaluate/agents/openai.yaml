@@ -1,0 +1,5 @@
+interface:
+  display_name: "Evaluate"
+  short_description: "Improve loop quality and budget use"
+policy:
+  allow_implicit_invocation: false
