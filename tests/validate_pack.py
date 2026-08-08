@@ -9,19 +9,23 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-EXPECTED_SKILLS = {
+
+CANONICAL_SKILLS = {
     "thoughtloop",
-    "self-correction",
-    "explorer",
-    "challenger",
-    "synthesizer",
+    "gapfinder",
+    "discover",
+    "investigate",
+    "decide",
     "builder",
-    "ground-truth-verifier",
+    "verify",
     "judge",
-    "revision-manager",
-    "adversarial-review",
-    "loop-evaluator",
+    "review",
+    "revise",
+    "handoff",
+    "evaluate",
+    "standard-english",
 }
+EXPECTED_SKILLS = CANONICAL_SKILLS
 
 
 def parse_frontmatter(path: Path) -> dict[str, str]:
@@ -49,7 +53,7 @@ def main() -> int:
     assert NAME_RE.fullmatch(manifest["name"]), "plugin name must be kebab-case"
     assert manifest.get("skills") == "./skills/", "manifest skills path should be ./skills/"
     assert re.fullmatch(r"\d+\.\d+\.\d+", manifest["version"]), "version must be semver-like"
-    assert manifest["version"] == "0.4.0", "expected v0.4.0 ThoughtLoop release"
+    assert manifest["version"] == "1.0.0", "expected v1.0.0 cohesive graph release"
 
     skill_dirs = sorted(p for p in SKILLS.iterdir() if p.is_dir())
     assert len(skill_dirs) == len(EXPECTED_SKILLS), (
@@ -78,7 +82,6 @@ def main() -> int:
 
     assert names == EXPECTED_SKILLS, f"unexpected skill set: {sorted(names)}"
 
-    # Only the master orchestrator should route implicitly.
     for d in skill_dirs:
         y = (d / "agents" / "openai.yaml").read_text(encoding="utf-8")
         is_true = bool(re.search(r"allow_implicit_invocation:\s*true\b", y))
@@ -86,55 +89,65 @@ def main() -> int:
             f"{d.name}: implicit invocation should be true only for thoughtloop"
         )
 
-    required_refs = [
+    required_files = [
+        ROOT / "core/contracts.md",
+        ROOT / "core/graph.json",
+        ROOT / "core/routing.md",
+        ROOT / "core/budget-policy.md",
+        ROOT / "graphs/default.md",
+        ROOT / "graphs/engineering.md",
+        ROOT / "graphs/debugging.md",
+        ROOT / "graphs/writing.md",
+        ROOT / "tests/graph_cases.json",
+        ROOT / "tests/validate_graph.py",
         ROOT / "skills/thoughtloop/references/routing.md",
         ROOT / "skills/thoughtloop/references/evidence-ladder.md",
         ROOT / "skills/thoughtloop/references/state-contract.md",
         ROOT / "skills/thoughtloop/references/solution-space-search.md",
         ROOT / "skills/thoughtloop/references/failure-depth.md",
-        ROOT / "skills/loop-evaluator/scripts/calculate_metrics.py",
+        ROOT / "skills/evaluate/scripts/calculate_metrics.py",
     ]
-    for p in required_refs:
-        assert p.exists(), f"missing {p}"
+    for path in required_files:
+        assert path.exists(), f"missing {path}"
 
     orchestrator = (ROOT / "skills/thoughtloop/SKILL.md").read_text(encoding="utf-8")
-    for reference in [
-        "references/routing.md",
-        "references/solution-space-search.md",
-        "references/evidence-ladder.md",
-        "references/failure-depth.md",
-        "references/state-contract.md",
-    ]:
-        assert reference in orchestrator, f"orchestrator does not link reference: {reference}"
     for phrase in [
         "DISCOVER -> DECIDE -> EXECUTE -> PROVE",
-        "IMPLEMENTATION",
-        "STRATEGY",
-        "ASSUMPTION_OR_FRAME",
-        "EVIDENCE_GAP",
-        "$explorer",
-        "$challenger",
-        "$synthesizer",
+        "$gapfinder",
+        "$discover",
+        "$investigate",
+        "$decide",
+        "$verify",
+        "$judge",
+        "$review",
+        "$revise",
         "--subagents",
         "budget=balanced",
         "delegation.mode=subagents",
         "fork_context=false",
-        "`light`",
-        "`deep`",
+        "light",
+        "deep",
         "fresh context",
         "lower-cost",
     ]:
         assert phrase in orchestrator, f"orchestrator missing required architecture token: {phrase}"
 
-    explorer = (ROOT / "skills/explorer/SKILL.md").read_text(encoding="utf-8")
-    assert "Do not rank or select the winner" in explorer, "Explorer must not prematurely select"
-    synthesizer = (ROOT / "skills/synthesizer/SKILL.md").read_text(encoding="utf-8")
-    for action in ("`BUILD`", "`EXPERIMENT`", "`EXPLORE`"):
-        assert action in synthesizer, f"Synthesizer routing contract missing: {action}"
-    challenger = (ROOT / "skills/challenger/SKILL.md").read_text(encoding="utf-8")
-    assert "$adversarial-review" in challenger, "Challenger/Adversarial distinction missing"
+    canonical_text = {
+        name: (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+        for name in CANONICAL_SKILLS
+    }
+    for name, text in canonical_text.items():
+        assert f"name: {name}" in text, f"canonical node missing frontmatter: {name}"
 
-    assert manifest["name"] == "thoughtloop", "plugin must be branded thoughtloop"
+    for action in ("`BUILD`", "`EXPERIMENT`", "`EXPLORE`"):
+        assert action in canonical_text["decide"], f"decision contract missing: {action}"
+    for phrase in ("UNKNOWN",):
+        assert phrase in canonical_text["verify"], f"verification contract missing: {phrase}"
+        assert phrase in canonical_text["judge"], f"judgment contract missing: {phrase}"
+    assert "PASS" in canonical_text["judge"] and "FAIL" in canonical_text["judge"]
+    assert "No external profile required" in canonical_text["standard-english"]
+
+    assert manifest["name"] == "thoughtloop", "plugin must remain branded thoughtloop"
     assert manifest.get("interface", {}).get("displayName") == "ThoughtLoop", "displayName must be ThoughtLoop"
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "Think wider. Build better. Prove it." in readme, "tagline missing"
@@ -142,11 +155,10 @@ def main() -> int:
     for section in (
         "Table of contents",
         "Why ThoughtLoop",
-        "How it works",
+        "Canonical graph",
         "Quick start",
         "Install",
         "Validate",
-        "Compatibility",
         "Roadmap",
         "Contributing",
         "Security",
@@ -156,10 +168,33 @@ def main() -> int:
         assert (ROOT / document).exists(), f"missing repository document: {document}"
     assert not (ROOT / "marketplace.example.json").exists(), "duplicate marketplace metadata should not be present"
     assert not (ROOT / "DEPLOY_TO_GITHUB.md").exists(), "obsolete deployment guide should not be present"
-    alias = (ROOT / "skills/self-correction/SKILL.md").read_text(encoding="utf-8")
-    assert "$thoughtloop" in alias and "Deprecated" in alias, "compatibility alias must redirect to ThoughtLoop"
+    for removed in (
+        "self-correction",
+        "explorer",
+        "challenger",
+        "prototype-probe",
+        "codebase-analysis",
+        "debugging-forensics",
+        "log-forensics",
+        "performance-forensics",
+        "synthesizer",
+        "risk-first-plan",
+        "ground-truth-verifier",
+        "adversarial-review",
+        "revision-manager",
+        "loop-evaluator",
+        "engineering-team",
+    ):
+        assert not (ROOT / "skills" / removed).exists(), f"removed compatibility path must not be present: {removed}"
+    for path in ROOT.rglob("*"):
+        if path.is_file() and path != Path(__file__) and ".git" not in path.parts:
+            text = path.read_text(encoding="utf-8", errors="replace")
+            assert "self-correction" not in text, f"stale self-correction reference in {path}"
 
-    print(f"OK: {manifest['name']} {manifest['version']} with {len(skill_dirs)} valid skills")
+    print(
+        f"OK: {manifest['name']} {manifest['version']} with "
+        f"{len(CANONICAL_SKILLS)} canonical nodes"
+    )
     return 0
 
 

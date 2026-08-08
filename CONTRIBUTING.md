@@ -6,7 +6,8 @@ ThoughtLoop is a small, contract-driven skill pack. Contributions are welcome wh
 
 - Preserve the public architecture: **Discover → Decide → Execute → Prove**.
 - Keep `thoughtloop` as the only implicitly invoked skill.
-- Keep specialist skills explicit unless the invocation policy is intentionally changed and tested.
+- Keep the canonical nodes independently callable; do not add compatibility aliases or a second orchestrator.
+- Extend `core/contracts.md` and `core/routing.md` rather than creating parallel state or orchestration policies.
 - Treat evidence as stronger than confidence. Missing evidence remains `UNKNOWN`.
 - Never request or record hidden chain-of-thought. Keep observable evidence, alternatives, decisions, tests, critiques, and concise rationales.
 - Keep exploration, revisions, and delegation bounded.
@@ -17,7 +18,8 @@ Run the required checks from the repository root:
 
 ```bash
 python tests/validate_pack.py
-python skills/loop-evaluator/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
+python tests/validate_graph.py
+python skills/evaluate/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
 git diff --check
 ```
 
@@ -30,6 +32,6 @@ Explain:
 1. the problem or use case;
 2. the smallest behavior or documentation change that addresses it;
 3. the validation you ran;
-4. any remaining uncertainty or compatibility impact.
+4. any remaining uncertainty or breaking impact.
 
 Avoid unrelated rewrites. For changes to orchestration or invocation behavior, update the validator, examples, changelog, and README together.

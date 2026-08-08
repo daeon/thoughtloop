@@ -1,0 +1,11 @@
+[
+  {"id": "obvious-edit", "kind": "verdict", "risk": "low", "goal": "Make a constrained one-file edit", "route": ["builder", "verify", "judge"]},
+  {"id": "architecture-choice", "kind": "verdict", "risk": "medium", "goal": "Choose between materially different cache designs", "route": ["gapfinder", "discover", "decide", "builder", "verify", "judge"]},
+  {"id": "debugging-investigation", "kind": "verdict", "risk": "medium", "goal": "Find the root cause of a startup crash before editing", "route": ["thoughtloop", "gapfinder", "investigate:debugging", "decide", "builder", "verify", "judge"]},
+  {"id": "performance-regression", "kind": "verdict", "risk": "high", "goal": "Investigate a p99 regression and validate an optimization", "route": ["gapfinder", "investigate:performance", "decide", "builder", "verify", "judge", "review"]},
+  {"id": "high-risk-migration", "kind": "verdict", "risk": "high", "goal": "Migrate a persisted interface with rollback protection", "route": ["thoughtloop", "gapfinder", "discover", "investigate:repository", "decide", "builder", "verify", "judge", "review"]},
+  {"id": "constrained-writing", "kind": "verdict", "risk": "medium", "goal": "Rewrite a requirements document under a defined normative standard", "route": ["standard-english", "builder", "verify", "judge"]},
+  {"id": "failure-backtrack", "kind": "verdict", "risk": "high", "goal": "Route a repeated implementation failure to a deeper hypothesis review", "route": ["thoughtloop", "verify", "judge", "revise", "investigate:debugging", "decide", "builder", "verify", "judge"]},
+  {"id": "session-handoff", "kind": "continuity", "risk": "medium", "goal": "Continue an unfinished investigation in a later session", "route": ["thoughtloop", "handoff"]},
+  {"id": "loop-evaluation", "kind": "continuity", "risk": "low", "goal": "Evaluate budget and routing quality after a completed run", "route": ["thoughtloop", "evaluate"]}
+]

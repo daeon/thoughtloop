@@ -1,0 +1,5 @@
+interface:
+  display_name: "Review"
+  short_description: "Red-team a result after ordinary checks"
+policy:
+  allow_implicit_invocation: false

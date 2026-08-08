@@ -1,5 +1,0 @@
-interface:
-  display_name: "Ground Truth Verifier"
-  short_description: "Collect independent evidence for criteria"
-policy:
-  allow_implicit_invocation: false

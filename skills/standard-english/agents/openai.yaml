@@ -1,0 +1,5 @@
+interface:
+  display_name: "Standard English"
+  short_description: "Apply explicit language and documentation standards"
+policy:
+  allow_implicit_invocation: false

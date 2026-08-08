@@ -7,7 +7,6 @@ are picked up immediately. Use --copy if you prefer independent copies.
 from __future__ import annotations
 
 import argparse
-import os
 import shutil
 from pathlib import Path
 

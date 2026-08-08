@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Remove this pack's skills from ~/.agents/skills."""
 from __future__ import annotations
+
 import shutil
 from pathlib import Path
 
@@ -18,6 +19,7 @@ def main() -> int:
         elif dst.is_dir():
             shutil.rmtree(dst)
             print(f"REMOVE {dst}")
+
     return 0
 
 

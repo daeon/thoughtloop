@@ -1,0 +1,5 @@
+interface:
+  display_name: "Investigate"
+  short_description: "Map, debug, analyze logs, or measure performance"
+policy:
+  allow_implicit_invocation: false

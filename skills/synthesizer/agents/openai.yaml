@@ -1,5 +1,0 @@
-interface:
-  display_name: "Synthesizer"
-  short_description: "Select, combine, or experimentally distinguish approaches"
-policy:
-  allow_implicit_invocation: false

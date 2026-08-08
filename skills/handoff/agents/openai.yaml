@@ -1,0 +1,5 @@
+interface:
+  display_name: "Handoff"
+  short_description: "Create compact continuation state"
+policy:
+  allow_implicit_invocation: false
