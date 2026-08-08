@@ -154,6 +154,7 @@ def main() -> int:
         ROOT / "core/budget-policy.md",
         ROOT / "tests/graph_cases.json",
         ROOT / "tests/validate_graph.py",
+        ROOT / "evals/activation_cases.jsonl",
         ROOT / "scripts/calculate_metrics.py",
         ROOT / "skills/thoughtloop/references/contracts.md",
         ROOT / "skills/thoughtloop/references/routing.md",
@@ -170,6 +171,17 @@ def main() -> int:
         assert path.exists(), f"missing {path}"
 
     orchestrator = (ROOT / "skills/thoughtloop/SKILL.md").read_text(encoding="utf-8")
+    orchestrator_description = parse_frontmatter(ROOT / "skills/thoughtloop/SKILL.md")["description"]
+    for phrase in (
+        "consequential",
+        "material alternatives",
+        "Do not invoke",
+        "simple explanations",
+        "trivial edits",
+        "routine commands",
+        "more specific skill",
+    ):
+        assert phrase in orchestrator_description, f"activation boundary missing: {phrase}"
     for phrase in [
         "DISCOVER -> DECIDE -> EXECUTE -> PROVE",
         "$gapfinder",

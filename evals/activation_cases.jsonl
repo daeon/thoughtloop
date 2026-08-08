@@ -1,0 +1,8 @@
+{"id":"architecture-choice","prompt":"Choose between two cache architectures, explain the tradeoffs, implement the better one, and prove the result.","should_trigger":true,"reason":"material alternatives and implementation risk"}
+{"id":"performance-regression","prompt":"Investigate why p99 latency regressed after the release, identify the cause, and validate a safe fix.","should_trigger":true,"reason":"uncertain cause and performance consequence"}
+{"id":"migration","prompt":"Migrate this persisted API while preserving compatibility and providing rollback evidence.","should_trigger":true,"reason":"migration and compatibility risk"}
+{"id":"rename-local-variable","prompt":"Rename the local variable foo to bar in this function.","should_trigger":false,"reason":"trivial reversible edit"}
+{"id":"explain-function","prompt":"Explain what this function does.","should_trigger":false,"reason":"simple explanation"}
+{"id":"format-json","prompt":"Format this JSON file.","should_trigger":false,"reason":"routine formatting"}
+{"id":"show-git-status","prompt":"Show me the git status.","should_trigger":false,"reason":"routine command"}
+{"id":"dedicated-pdf-skill","prompt":"Use the dedicated PDF skill to inspect this PDF.","should_trigger":false,"reason":"more specific skill owns the task"}
