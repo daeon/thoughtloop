@@ -1,6 +1,6 @@
 ---
 name: thoughtloop
-description: Use implicitly for consequential multi-step coding work involving material alternatives, uncertain causes, migrations, compatibility, security, performance, or a need for independent proof. Do not invoke for simple explanations, formatting, trivial edits, routine commands, or work already governed by a more specific skill.
+description: Use implicitly for consequential multi-step coding work involving material alternatives, uncertain causes, migrations, compatibility, security, performance, or independent proof. Do not invoke for simple explanations, formatting, trivial edits, routine commands, or tasks already governed by a more specific skill.
 ---
 
 # ThoughtLoop

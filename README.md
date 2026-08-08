@@ -128,7 +128,10 @@ node rather than being exposed as duplicate compatibility skills.
 | Meta | internal evaluation | Measures loop quality, evidence quality, and budget use. |
 | Public surface | 8 skills | Keeps focused calls independently usable while preserving one graph vocabulary. |
 
-Only `thoughtloop` permits implicit invocation. The other skills are explicit by default, so they do not trigger on unrelated work.
+Only `thoughtloop` permits implicit invocation. Its boundary is consequential,
+decision-sensitive coding work—not coding vocabulary alone. Simple explanations,
+formatting, trivial edits, routine commands, and tasks already governed by a
+more specific skill remain explicit or stay with the more specific skill.
 
 ## Subagent mode
 
