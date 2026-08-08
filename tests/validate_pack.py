@@ -9,6 +9,31 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+SEMVER_RE = re.compile(
+    r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
+    r"(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?"
+    r"(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$"
+)
+
+ALLOWED_CATEGORIES = {
+    "Art & Design",
+    "Business",
+    "Communication",
+    "Developer Tools",
+    "Education",
+    "Entertainment",
+    "Finance",
+    "Health & Fitness",
+    "Lifestyle",
+    "Marketing",
+    "News",
+    "Productivity",
+    "Research",
+    "Shopping",
+    "Social",
+    "Travel",
+    "Utilities",
+}
 
 CANONICAL_SKILLS = {
     "thoughtloop",
@@ -26,6 +51,47 @@ CANONICAL_SKILLS = {
     "standard-english",
 }
 EXPECTED_SKILLS = CANONICAL_SKILLS
+
+
+def validate_manifest(manifest: dict) -> None:
+    assert NAME_RE.fullmatch(manifest["name"]), "plugin name must be kebab-case"
+    assert manifest.get("skills") == "./skills/", "manifest skills path should be ./skills/"
+    assert SEMVER_RE.fullmatch(manifest["version"]), "version must follow semantic versioning"
+
+    author = manifest.get("author")
+    assert isinstance(author, dict), "manifest author must be an object"
+    author_name = author.get("name", "")
+    assert isinstance(author_name, str) and author_name.strip(), "author.name must be non-empty"
+
+    interface = manifest.get("interface")
+    assert isinstance(interface, dict), "manifest interface must be an object"
+    display_name = interface.get("displayName", "")
+    assert isinstance(display_name, str) and display_name.strip(), "displayName must be non-empty"
+    assert len(display_name) <= 30, "displayName exceeds 30 characters"
+
+    short_description = interface.get("shortDescription", "")
+    assert isinstance(short_description, str) and short_description.strip(), (
+        "shortDescription must be non-empty"
+    )
+    assert len(short_description) <= 30, "shortDescription exceeds 30 characters"
+
+    developer_name = interface.get("developerName", "")
+    assert isinstance(developer_name, str) and developer_name.strip(), (
+        "developerName must be non-empty"
+    )
+    assert developer_name == author_name, "developerName must match author.name"
+
+    category = interface.get("category")
+    assert category in ALLOWED_CATEGORIES, f"unsupported plugin category: {category!r}"
+
+    prompts = interface.get("defaultPrompt")
+    assert isinstance(prompts, list), "defaultPrompt must be an array"
+    assert 1 <= len(prompts) <= 3, "defaultPrompt must contain one to three prompts"
+    assert len(set(prompts)) == len(prompts), "defaultPrompt entries must be unique"
+    for prompt in prompts:
+        assert isinstance(prompt, str) and prompt.strip(), "defaultPrompt entries must be non-empty"
+        assert "\n" not in prompt and "\r" not in prompt, "defaultPrompt entries must be single-line"
+        assert len(prompt) <= 128, "defaultPrompt entry exceeds 128 characters"
 
 
 def parse_frontmatter(path: Path) -> dict[str, str]:
@@ -50,10 +116,7 @@ def parse_frontmatter(path: Path) -> dict[str, str]:
 def main() -> int:
     manifest_path = ROOT / ".codex-plugin" / "plugin.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert NAME_RE.fullmatch(manifest["name"]), "plugin name must be kebab-case"
-    assert manifest.get("skills") == "./skills/", "manifest skills path should be ./skills/"
-    assert re.fullmatch(r"\d+\.\d+\.\d+", manifest["version"]), "version must be semver-like"
-    assert manifest["version"] == "1.0.0", "expected v1.0.0 cohesive graph release"
+    validate_manifest(manifest)
 
     skill_dirs = sorted(p for p in SKILLS.iterdir() if p.is_dir())
     assert len(skill_dirs) == len(EXPECTED_SKILLS), (
