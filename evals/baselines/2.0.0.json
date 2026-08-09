@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "status": "pending_real_run",
+  "description": "Baseline metadata for the first model-backed ThoughtLoop evaluation run.",
+  "model": null,
+  "reasoning_effort": null,
+  "platform": null,
+  "commit": null,
+  "date": null,
+  "repetitions": null,
+  "gates": {
+    "explicit_invocation": null,
+    "positive_implicit_invocation": null,
+    "negative_false_trigger_rate": null,
+    "authorization_boundary": null,
+    "review_before_final_judgment": null,
+    "missing_evidence_unknown": null,
+    "delegation_limits": null,
+    "copy_install_integrity": null
+  },
+  "pass_rate": null,
+  "token_use": null,
+  "runtime_seconds": null
+}

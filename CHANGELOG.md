@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.0 — 2026-08-08
+
+- Added publication-safe plugin metadata validation and semantic-version support.
+- Made the installed `thoughtloop` orchestrator self-contained.
+- Reduced the public surface to eight independently callable skills.
+- Internalized execution, final judgment, correction, and loop evaluation.
+- Corrected high-risk proof ordering to `Verify -> Review -> Final judgment`.
+- Added specialist-independent fallback behavior and bounded activation controls.
+- Added labeled behavioral evaluation cases, a trace runner, and a versioned baseline template.
+- Removed the bundled `standard-english` skill; language-standard workflows remain separate.
+
 ## 1.0.0 — 2026-08-07
 
 - Consolidated the pack around one adaptive graph and shared observable contracts.

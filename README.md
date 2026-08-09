@@ -69,25 +69,27 @@ The four stages answer different questions:
 ```mermaid
 flowchart TD
     T[Task] --> G{Unknowns or material choice?}
-    G -->|No| B[Builder]
+    G -->|No| B[Execute]
     G -->|Yes| F[Gapfinder]
     F --> D[Discover or Investigate]
     D --> S[Decide]
     S --> B
     B --> V[Verify]
-    V --> J[Judge]
-    J --> R{High risk or subtle?}
+    V --> R{Review warranted?}
     R -->|Yes| X[Review]
-    R -->|No| O[Outcome]
+    R -->|No| O[Final outcome]
     X --> O
-    J --> M{Failure or unknown?}
-    M -->|Yes| Q[Revise]
+    O --> M{Failure or unknown?}
+    M -->|Yes| Q[Correct]
     Q --> D
 ```
 
-The graph is a set of reusable nodes, not one giant skill. Shared contracts in
-[`core/contracts.md`](core/contracts.md) carry observable state between nodes;
-[`core/routing.md`](core/routing.md) defines their boundaries.
+The graph is a set of reusable public nodes plus internal operations owned by
+the orchestrator. The installed contracts in
+[`skills/thoughtloop/references/contracts.md`](skills/thoughtloop/references/contracts.md)
+carry observable state; the installed routing policy in
+[`skills/thoughtloop/references/routing.md`](skills/thoughtloop/references/routing.md)
+defines the boundaries.
 
 ### Canonical nodes
 
@@ -98,14 +100,12 @@ The graph is a set of reusable nodes, not one giant skill. Shared contracts in
 | `discover` | Solution search, framing challenge, and disposable prototypes |
 | `investigate` | Repository, debugging, log, and performance forensics |
 | `decide` | Evidence-backed selection and risk-first planning |
-| `builder` | Smallest coherent implementation or revision |
 | `verify` | Independent evidence collection |
-| `judge` | Criterion-level `PASS`, `FAIL`, or `UNKNOWN` |
 | `review` | Post-check red-team review |
-| `revise` | Failure-depth routing |
 | `handoff` | Compact continuation state |
-| `evaluate` | Loop and budget evaluation |
-| `standard-english` | Optional explicit language and documentation standards |
+
+Execution, final judgment, correction, and loop evaluation are internal
+operations owned by `thoughtloop`, not separately installed skills.
 
 ## Independent nodes
 
@@ -122,22 +122,23 @@ node rather than being exposed as duplicate compatibility skills.
 | Discover | `gapfinder`, `discover` | Finds expensive unknowns, searches options, challenges framing, and probes concrete alternatives. |
 | Investigate | `investigate` | Maps repositories, debugs failures, analyzes logs, and measures performance without editing by default. |
 | Decide | `decide` | Selects an approach or creates a risk-first implementation plan. |
-| Execute | `builder` | Implements the selected strategy or a targeted revision. |
-| Control | `revise` | Routes failures to the level that is actually wrong. |
-| Prove | `verify`, `judge`, `review` | Collects evidence, applies criterion-level verdicts, and red-teams high-risk results. |
+| Execute | internal `execute` | Implements the selected strategy or a targeted revision. |
+| Prove | `verify`, `review`, internal `final-judgment` | Collects evidence, red-teams high-risk results, and applies criterion-level outcomes. |
 | Continuity | `handoff` | Preserves compact state for another agent or session. |
-| Meta | `evaluate` | Measures loop quality, evidence quality, and budget use. |
-| Writing | `standard-english` | Applies explicit language standards only when they materially help. |
-| Public surface | 13 canonical nodes | Keeps focused calls independently usable while preserving one graph vocabulary. |
+| Meta | internal evaluation | Measures loop quality, evidence quality, and budget use. |
+| Public surface | 8 skills | Keeps focused calls independently usable while preserving one graph vocabulary. |
 
-Only `thoughtloop` permits implicit invocation. The other skills are explicit by default, so they do not trigger on unrelated work.
+Only `thoughtloop` permits implicit invocation. Its boundary is consequential,
+decision-sensitive coding work—not coding vocabulary alone. Simple explanations,
+formatting, trivial edits, routine commands, and tasks already governed by a
+more specific skill remain explicit or stay with the more specific skill.
 
 ## Subagent mode
 
 Subagent mode is opt-in and budget-aware:
 
 ```text
-$thoughtloop --subagents --budget=balanced Redesign this caching layer.
+$thoughtloop Use bounded subagents with a balanced budget to redesign this caching layer.
 ```
 
 The parent agent keeps ownership of the contract, decisions, edits, evidence synthesis, and final result. Delegated work stays narrow and starts with fresh context. Use lower-cost agents for bounded search or mechanical checks; reserve stronger reasoning for difficult tradeoffs, disagreements, and final decisions.
@@ -198,12 +199,39 @@ Run the pack checks locally:
 ```bash
 python tests/validate_pack.py
 python tests/validate_graph.py
-python skills/evaluate/scripts/calculate_metrics.py examples/sample-loop-log.jsonl
+python scripts/calculate_metrics.py examples/sample-loop-log.jsonl
 ```
 
 The validator uses only the Python standard library. The metrics script reports signals such as exploration, revisions, regressions, unknowns, cost, tokens, and runtime. Treat those metrics as diagnostic signals, not as a single quality score.
 
 The same checks run in [GitHub Actions](.github/workflows/validate.yml) for pushes and pull requests.
+
+## Behavioral evaluations
+
+Structural validation proves pack invariants; it does not prove that an agent
+will choose the right route for every prompt. The labeled corpus in
+[`evals/cases.jsonl`](evals/cases.jsonl) covers activation, route depth,
+authorization boundaries, missing evidence, review findings, backtracking,
+delegation budgets, and standalone operation.
+
+Validate the corpus without invoking an agent:
+
+```bash
+python scripts/run_behavioral_evals.py --validate-only
+```
+
+Run model-backed traces with a host command when the environment provides one:
+
+```bash
+python scripts/run_behavioral_evals.py --runner codex exec --output evals/runs/local.json
+```
+
+The runner captures prompts, observable route/verdict fields when the host
+returns structured JSON, bounded stdout/stderr, delegation observations, and
+runtime. It does not claim a pass rate when the host emits no structured
+observation. The first release baseline is kept in
+[`evals/baselines/2.0.0.json`](evals/baselines/2.0.0.json) and remains pending
+until a real model-backed run is captured.
 
 ## Roadmap
 

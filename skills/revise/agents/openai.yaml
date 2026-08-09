@@ -1,5 +1,0 @@
-interface:
-  display_name: "Revise"
-  short_description: "Route failures to the correct correction depth"
-policy:
-  allow_implicit_invocation: false

@@ -41,14 +41,9 @@ CANONICAL_SKILLS = {
     "discover",
     "investigate",
     "decide",
-    "builder",
     "verify",
-    "judge",
     "review",
-    "revise",
     "handoff",
-    "evaluate",
-    "standard-english",
 }
 EXPECTED_SKILLS = CANONICAL_SKILLS
 
@@ -157,23 +152,39 @@ def main() -> int:
         ROOT / "core/graph.json",
         ROOT / "core/routing.md",
         ROOT / "core/budget-policy.md",
-        ROOT / "graphs/default.md",
-        ROOT / "graphs/engineering.md",
-        ROOT / "graphs/debugging.md",
-        ROOT / "graphs/writing.md",
         ROOT / "tests/graph_cases.json",
         ROOT / "tests/validate_graph.py",
+        ROOT / "evals/activation_cases.jsonl",
+        ROOT / "evals/cases.jsonl",
+        ROOT / "evals/baselines/2.0.0.json",
+        ROOT / "scripts/calculate_metrics.py",
+        ROOT / "scripts/run_behavioral_evals.py",
+        ROOT / "skills/thoughtloop/references/contracts.md",
         ROOT / "skills/thoughtloop/references/routing.md",
+        ROOT / "skills/thoughtloop/references/budget-policy.md",
         ROOT / "skills/thoughtloop/references/evidence-ladder.md",
-        ROOT / "skills/thoughtloop/references/state-contract.md",
-        ROOT / "skills/thoughtloop/references/solution-space-search.md",
-        ROOT / "skills/thoughtloop/references/failure-depth.md",
-        ROOT / "skills/evaluate/scripts/calculate_metrics.py",
+        ROOT / "skills/thoughtloop/references/execution.md",
+        ROOT / "skills/thoughtloop/references/correction.md",
+        ROOT / "skills/thoughtloop/references/routes/direct.md",
+        ROOT / "skills/thoughtloop/references/routes/deliberate.md",
+        ROOT / "skills/thoughtloop/references/routes/investigation.md",
+        ROOT / "skills/thoughtloop/references/routes/deep.md",
     ]
     for path in required_files:
         assert path.exists(), f"missing {path}"
 
     orchestrator = (ROOT / "skills/thoughtloop/SKILL.md").read_text(encoding="utf-8")
+    orchestrator_description = parse_frontmatter(ROOT / "skills/thoughtloop/SKILL.md")["description"]
+    for phrase in (
+        "consequential",
+        "material alternatives",
+        "Do not invoke",
+        "simple explanations",
+        "trivial edits",
+        "routine commands",
+        "more specific skill",
+    ):
+        assert phrase in orchestrator_description, f"activation boundary missing: {phrase}"
     for phrase in [
         "DISCOVER -> DECIDE -> EXECUTE -> PROVE",
         "$gapfinder",
@@ -181,13 +192,13 @@ def main() -> int:
         "$investigate",
         "$decide",
         "$verify",
-        "$judge",
         "$review",
-        "$revise",
-        "--subagents",
-        "budget=balanced",
-        "delegation.mode=subagents",
-        "fork_context=false",
+        "$handoff",
+        "execute",
+        "final-judgment",
+        "correct",
+        "references/contracts.md",
+        "references/budget-policy.md",
         "light",
         "deep",
         "fresh context",
@@ -204,17 +215,14 @@ def main() -> int:
 
     for action in ("`BUILD`", "`EXPERIMENT`", "`EXPLORE`"):
         assert action in canonical_text["decide"], f"decision contract missing: {action}"
-    for phrase in ("UNKNOWN",):
-        assert phrase in canonical_text["verify"], f"verification contract missing: {phrase}"
-        assert phrase in canonical_text["judge"], f"judgment contract missing: {phrase}"
-    assert "PASS" in canonical_text["judge"] and "FAIL" in canonical_text["judge"]
-    assert "No external profile required" in canonical_text["standard-english"]
+    assert "UNKNOWN" in canonical_text["verify"], "verification contract missing: UNKNOWN"
+    assert "ReviewReport" in canonical_text["review"], "review contract missing: ReviewReport"
 
     assert manifest["name"] == "thoughtloop", "plugin must remain branded thoughtloop"
     assert manifest.get("interface", {}).get("displayName") == "ThoughtLoop", "displayName must be ThoughtLoop"
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "Think wider. Build better. Prove it." in readme, "tagline missing"
-    assert "Subagent mode" in readme and "--subagents" in readme, "subagent mode documentation missing"
+    assert "Subagent mode" in readme and "bounded" in readme, "subagent mode documentation missing"
     for section in (
         "Table of contents",
         "Why ThoughtLoop",
@@ -231,28 +239,12 @@ def main() -> int:
         assert (ROOT / document).exists(), f"missing repository document: {document}"
     assert not (ROOT / "marketplace.example.json").exists(), "duplicate marketplace metadata should not be present"
     assert not (ROOT / "DEPLOY_TO_GITHUB.md").exists(), "obsolete deployment guide should not be present"
-    for removed in (
-        "self-correction",
-        "explorer",
-        "challenger",
-        "prototype-probe",
-        "codebase-analysis",
-        "debugging-forensics",
-        "log-forensics",
-        "performance-forensics",
-        "synthesizer",
-        "risk-first-plan",
-        "ground-truth-verifier",
-        "adversarial-review",
-        "revision-manager",
-        "loop-evaluator",
-        "engineering-team",
-    ):
-        assert not (ROOT / "skills" / removed).exists(), f"removed compatibility path must not be present: {removed}"
-    for path in ROOT.rglob("*"):
-        if path.is_file() and path != Path(__file__) and ".git" not in path.parts:
-            text = path.read_text(encoding="utf-8", errors="replace")
-            assert "self-correction" not in text, f"stale self-correction reference in {path}"
+    for removed in ("builder", "judge", "revise", "evaluate", "standard-english"):
+        assert not (ROOT / "skills" / removed).exists(), f"internalized skill path remains: {removed}"
+    for path in (ROOT / "README.md", ROOT / "skills" / "thoughtloop" / "SKILL.md"):
+        text = path.read_text(encoding="utf-8")
+        for removed in ("$builder", "$judge", "$revise", "$evaluate", "$standard-english"):
+            assert removed not in text, f"stale public skill reference in {path}: {removed}"
 
     print(
         f"OK: {manifest['name']} {manifest['version']} with "

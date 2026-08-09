@@ -14,4 +14,4 @@ This is the shared investigation engine. Select one mode:
 
 Read-only is the default. Do not edit source, tests, configuration, or runtime state unless the user explicitly changes the task to implementation. Treat logs as sensitive and summarize high-volume data.
 
-Return an `InvestigationReport` with scope, facts, evidence and provenance, hypotheses, ruled-out causes, unknowns, confidence limits, and next probes. Label implementation ideas as recommendations, not findings. In a graph, pass the report to `decide`, `verify`, or `builder` only after the relevant gate.
+Return an `InvestigationReport` with scope, facts, evidence and provenance, hypotheses, ruled-out causes, unknowns, confidence limits, and next probes. Label implementation ideas as recommendations, not findings. In a graph, pass the report to `decide`, `verify`, or the orchestrator's `execute` stage only after the relevant gate.

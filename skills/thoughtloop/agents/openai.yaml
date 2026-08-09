@@ -1,6 +1,6 @@
 interface:
   display_name: "ThoughtLoop"
   short_description: "Discover, decide, execute, and independently prove"
-  default_prompt: "Use ThoughtLoop adaptively: search when alternatives matter, decide deliberately, execute economically, verify independently, and backtrack at the right failure depth. Honor explicit --subagents or subagent-mode requests with narrow, budget-aware fresh-context delegation."
+  default_prompt: "Use ThoughtLoop for consequential coding work: explore when alternatives matter, execute economically, verify independently, and correct at the right depth."
 policy:
   allow_implicit_invocation: true

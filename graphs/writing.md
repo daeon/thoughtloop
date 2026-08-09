@@ -2,10 +2,10 @@
 
 ```text
 writing task
-  -> Standard English only when an explicit profile materially helps
-  -> Builder
+  -> Decide the required language and content constraints
+  -> Execute
   -> Verify mechanical constraints and preserved meaning
-  -> Judge
+  -> Final judgment
 ```
 
 Do not force a controlled-language or formal standard onto ordinary writing.

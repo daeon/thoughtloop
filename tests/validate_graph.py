@@ -13,11 +13,13 @@ CASES = ROOT / "tests" / "graph_cases.json"
 def main() -> int:
     graph = json.loads(GRAPH.read_text(encoding="utf-8"))
     canonical = {item["name"]: item for item in graph["canonical"]}
+    internal = {item["name"]: item for item in graph.get("internal", [])}
     assert graph["orchestrator"] == "thoughtloop"
     assert sum(item["implicit"] for item in canonical.values()) == 1
     assert canonical["thoughtloop"]["implicit"] is True
 
     public = set(canonical)
+    allowed_steps = public | set(internal)
     actual = {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")}
     assert actual == public, f"graph registry mismatch: actual={sorted(actual)}"
 
@@ -44,24 +46,25 @@ def main() -> int:
         route = case["route"]
         assert route, f"empty route: {case['id']}"
         for step in route:
-            assert step.split(":", 1)[0] in canonical, f"unknown node in {case['id']}: {step}"
+            assert step.split(":", 1)[0] in allowed_steps, f"unknown graph step in {case['id']}: {step}"
         kind = case.get("kind", "verdict")
         if kind == "verdict":
-            assert "verify" in route and "judge" in route, f"missing proof in {case['id']}"
-            assert route.index("verify") < route.index("judge"), f"verification order: {case['id']}"
+            assert "verify" in route and "final-judgment" in route, f"missing proof in {case['id']}"
+            assert route.index("verify") < route.index("final-judgment"), f"verification order: {case['id']}"
             if "review" in route:
-                assert route.index("judge") < route.index("review"), f"review order: {case['id']}"
+                assert route.index("review") < route.index("final-judgment"), f"review order: {case['id']}"
+            assert route[-1] == "final-judgment", f"final stage: {case['id']}"
         elif kind == "continuity":
-            assert "thoughtloop" in route and route[-1] in {"handoff", "evaluate"}, f"continuity route: {case['id']}"
+            assert "thoughtloop" in route and route[-1] == "handoff", f"continuity route: {case['id']}"
         else:
             raise AssertionError(f"unknown fixture kind: {kind}")
 
     assert any("discover" in case["route"] for case in cases)
     assert any(step.startswith("investigate:") for case in cases for step in case["route"])
-    assert any("revise" in case["route"] for case in cases)
+    assert any("correct" in case["route"] for case in cases)
     assert any("handoff" in case["route"] for case in cases)
-    assert any("evaluate" in case["route"] for case in cases)
-    assert any("standard-english" in case["route"] for case in cases)
+    assert any("execute" in case["route"] for case in cases)
+    assert any("final-judgment" in case["route"] for case in cases)
     print(f"OK: {len(canonical)} canonical nodes, {len(cases)} graph fixtures")
     return 0
 
