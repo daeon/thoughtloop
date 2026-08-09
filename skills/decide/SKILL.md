@@ -16,3 +16,10 @@ Choose one action:
 - `EXPLORE` when a material solution family or framing is missing.
 
 For `plan`, state success criteria, decisions and defaults, architecture/data and interface impacts, lifecycle behavior, failure modes, validation, rollback, files likely touched, invalidators, and mechanical steps. Return a `DecisionRecord`; do not edit the artifact or pretend qualitative judgment is a numeric proof.
+
+Make an implementation plan executable without over-specifying it. For each
+independently testable task, name likely files, consumed and produced
+interfaces, dependencies, verification command and expected observation,
+rollback or invalidation conditions, and unresolved placeholders. Review the
+plan for missing requirements, contradictions, inconsistent names, and tasks
+too large to verify independently before handing it to `execute`.
