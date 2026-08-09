@@ -220,11 +220,26 @@ Validate the corpus without invoking an agent:
 python scripts/run_behavioral_evals.py --validate-only
 ```
 
-Run model-backed traces with a host command when the environment provides one:
+Run model-backed traces with a host command when the environment provides one.
+The runner accepts JSON, JSONL, or noisy host output and scores only observable
+fields. Missing fields remain `UNKNOWN`:
 
 ```bash
 python scripts/run_behavioral_evals.py --runner codex exec --output evals/runs/local.json
 ```
+
+Use repetitions and a paired control when testing an instruction change:
+
+```bash
+python scripts/run_behavioral_evals.py \
+  --runner codex exec \
+  --control-runner codex exec \
+  --repetitions 3 --output evals/runs/paired.json
+```
+
+The output includes dimension-level results for activation, route compliance,
+verdict policy, and delegation limits. A completed baseline can be created with
+`--write-baseline path`, which refuses to overwrite an existing file.
 
 The runner captures prompts, observable route/verdict fields when the host
 returns structured JSON, bounded stdout/stderr, delegation observations, and
@@ -237,8 +252,8 @@ until a real model-backed run is captured.
 
 ThoughtLoop is deliberately small. The next useful improvements are:
 
-- expand examples for migrations, performance work, and operational debugging;
-- add more labeled evaluation fixtures for delegation and failure-depth routing;
+- add an independent qualitative judge for genuinely non-deterministic criteria;
+- add more pressure scenarios for urgency, sunk cost, ambiguity, and unavailable evidence;
 - publish tagged releases as the pack's contracts stabilize.
 
 Open an issue if you have a concrete use case or evidence that should change the design.
